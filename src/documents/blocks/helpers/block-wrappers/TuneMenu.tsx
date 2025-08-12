@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ArrowDownwardOutlined, ArrowUpwardOutlined, DeleteOutlined } from '@mui/icons-material';
+import { ArrowDownwardOutlined, ArrowUpwardOutlined, DeleteOutlined, ContentCopyOutlined } from '@mui/icons-material';
 import { IconButton, Paper, Stack, SxProps, Tooltip } from '@mui/material';
 
 import { TEditorBlock } from '../../../editor/core';
@@ -20,6 +20,11 @@ const sx: SxProps = {
 type Props = {
   blockId: string;
 };
+
+const generateId = () => {
+  return `block_${Math.random().toString(36).substr(2, 9)}`;
+};
+
 export default function TuneMenu({ blockId }: Props) {
   const document = useDocument();
 
@@ -78,6 +83,82 @@ export default function TuneMenu({ blockId }: Props) {
     }
     delete nDocument[blockId];
     resetDocument(nDocument);
+  };
+
+  const handleDuplicateClick = () => {
+    const nDocument: typeof document = { ...document };
+    
+    const newBlockId = generateId();
+    
+    const originalBlock = document[blockId] as TEditorBlock;
+    const duplicatedBlock = JSON.parse(JSON.stringify(originalBlock));
+    
+    nDocument[newBlockId] = duplicatedBlock;
+    
+    const insertDuplicateAfterOriginal = (childrenIds: string[] | null | undefined) => {
+      if (!childrenIds) {
+        return childrenIds;
+      }
+      
+      const index = childrenIds.indexOf(blockId);
+      if (index < 0) {
+        return childrenIds;
+      }
+      
+      const newChildrenIds = [...childrenIds];
+      newChildrenIds.splice(index + 1, 0, newBlockId);
+      return newChildrenIds;
+    };
+    
+    for (const [id, b] of Object.entries(nDocument)) {
+      const block = b as TEditorBlock;
+      if (id === blockId || id === newBlockId) {
+        continue;
+      }
+      
+      switch (block.type) {
+        case 'EmailLayout':
+          nDocument[id] = {
+            ...block,
+            data: {
+              ...block.data,
+              childrenIds: insertDuplicateAfterOriginal(block.data.childrenIds),
+            },
+          };
+          break;
+        case 'Container':
+          nDocument[id] = {
+            ...block,
+            data: {
+              ...block.data,
+              props: {
+                ...block.data.props,
+                childrenIds: insertDuplicateAfterOriginal(block.data.props?.childrenIds),
+              },
+            },
+          };
+          break;
+        case 'ColumnsContainer':
+          nDocument[id] = {
+            type: 'ColumnsContainer',
+            data: {
+              style: block.data.style,
+              props: {
+                ...block.data.props,
+                columns: block.data.props?.columns?.map((c) => ({
+                  childrenIds: insertDuplicateAfterOriginal(c.childrenIds),
+                })),
+              },
+            } as ColumnsContainerProps,
+          };
+          break;
+        default:
+          nDocument[id] = block;
+      }
+    }
+    
+    resetDocument(nDocument);
+    setSelectedBlockId(newBlockId);
   };
 
   const handleMoveClick = (direction: 'up' | 'down') => {
@@ -151,19 +232,24 @@ export default function TuneMenu({ blockId }: Props) {
   return (
     <Paper sx={sx} onClick={(ev) => ev.stopPropagation()}>
       <Stack>
-        <Tooltip title="Move up" placement="left-start">
-          <IconButton onClick={() => handleMoveClick('up')} sx={{ color: 'text.primary' }}>
+        <Tooltip title="Move Up" placement="left-start">
+          <IconButton onClick={() => handleMoveClick('up')} sx={{ color: 'text.secondary' }}>
             <ArrowUpwardOutlined fontSize="small" />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Move down" placement="left-start">
-          <IconButton onClick={() => handleMoveClick('down')} sx={{ color: 'text.primary' }}>
+        <Tooltip title="Move Down" placement="left-start">
+          <IconButton onClick={() => handleMoveClick('down')} sx={{ color: 'text.secondary' }}>
             <ArrowDownwardOutlined fontSize="small" />
           </IconButton>
         </Tooltip>
+        <Tooltip title="Duplicate" placement="left-start">
+          <IconButton onClick={handleDuplicateClick} sx={{ color: 'text.secondary' }}>
+            <ContentCopyOutlined fontSize="small" />
+          </IconButton>
+        </Tooltip>
         <Tooltip title="Delete" placement="left-start">
-          <IconButton onClick={handleDeleteClick} sx={{ color: 'text.primary' }}>
-            <DeleteOutlined fontSize="small" />
+          <IconButton onClick={handleDeleteClick} sx={{ color: 'red' }}>
+            <DeleteOutlined fontSize="medium" />
           </IconButton>
         </Tooltip>
       </Stack>
