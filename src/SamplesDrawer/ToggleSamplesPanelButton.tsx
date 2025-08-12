@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { FirstPageOutlined, MenuOutlined } from '@mui/icons-material';
+import { MenuOpen, MenuOutlined } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 
 import { toggleSamplesDrawerOpen, useSamplesDrawerOpen } from '../documents/editor/EditorContext';
@@ -8,7 +8,7 @@ import { toggleSamplesDrawerOpen, useSamplesDrawerOpen } from '../documents/edit
 function useIcon() {
   const samplesDrawerOpen = useSamplesDrawerOpen();
   if (samplesDrawerOpen) {
-    return <FirstPageOutlined fontSize="small" />;
+    return <MenuOpen fontSize="small" />;
   }
   return <MenuOutlined fontSize="small" />;
 }

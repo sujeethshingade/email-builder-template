@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { AppRegistrationOutlined, LastPageOutlined } from '@mui/icons-material';
+import { AppRegistrationOutlined, MenuOpen } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 
 import { toggleInspectorDrawerOpen, useInspectorDrawerOpen } from '../documents/editor/EditorContext';
@@ -14,7 +14,7 @@ export default function ToggleInspectorPanelButton() {
   if (inspectorDrawerOpen) {
     return (
       <IconButton onClick={handleClick}>
-        <LastPageOutlined fontSize="small" />
+        <MenuOpen fontSize="small" sx={{ transform: 'rotate(180deg)' }} />
       </IconButton>
     );
   }
