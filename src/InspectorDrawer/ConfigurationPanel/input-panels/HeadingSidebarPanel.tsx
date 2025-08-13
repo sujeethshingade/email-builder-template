@@ -37,6 +37,19 @@ export default function HeadingSidebarPanel({ data, setData }: HeadingSidebarPan
           updateData({ ...data, props: { ...data.props, text } });
         }}
       />
+      <div style={{ display: 'flex', gap: '5rem' }}>
+        <MultiStylePropertyPanel
+          names={['color']}
+          value={data.style}
+          onChange={(style) => updateData({ ...data, style })}
+        />
+        <MultiStylePropertyPanel
+          names={['backgroundColor']}
+          value={data.style}
+          onChange={(style) => updateData({ ...data, style })}
+        />
+      </div>
+
       <RadioGroupInput
         label="Level"
         defaultValue={data.props?.level ?? HeadingPropsDefaults.level}
@@ -48,8 +61,9 @@ export default function HeadingSidebarPanel({ data, setData }: HeadingSidebarPan
         <ToggleButton value="h2">H2</ToggleButton>
         <ToggleButton value="h3">H3</ToggleButton>
       </RadioGroupInput>
+      
       <MultiStylePropertyPanel
-        names={['color', 'backgroundColor', 'fontFamily', 'fontWeight', 'textAlign', 'padding']}
+        names={['textAlign', 'fontWeight', 'fontFamily', 'padding']}
         value={data.style}
         onChange={(style) => updateData({ ...data, style })}
       />

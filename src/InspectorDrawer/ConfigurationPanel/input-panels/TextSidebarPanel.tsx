@@ -30,7 +30,7 @@ export default function TextSidebarPanel({ data, setData }: TextSidebarPanelProp
     <BaseSidebarPanel title="Text block">
       <TextInput
         label="Content"
-        rows={5}
+        rows={3}
         defaultValue={data.props?.text ?? ''}
         onChange={(text) => updateData({ ...data, props: { ...data.props, text } })}
       />
@@ -40,8 +40,21 @@ export default function TextSidebarPanel({ data, setData }: TextSidebarPanelProp
         onChange={(markdown) => updateData({ ...data, props: { ...data.props, markdown } })}
       />
 
+      <div style={{ display: 'flex', gap: '5rem' }}>
+        <MultiStylePropertyPanel
+          names={['color']}
+          value={data.style}
+          onChange={(style) => updateData({ ...data, style })}
+        />
+        <MultiStylePropertyPanel
+          names={['backgroundColor']}
+          value={data.style}
+          onChange={(style) => updateData({ ...data, style })}
+        />
+      </div>
+
       <MultiStylePropertyPanel
-        names={['color', 'backgroundColor', 'fontFamily', 'fontSize', 'fontWeight', 'textAlign', 'padding']}
+        names={['textAlign', 'fontWeight', 'fontFamily', 'fontSize', 'padding']}
         value={data.style}
         onChange={(style) => updateData({ ...data, style })}
       />

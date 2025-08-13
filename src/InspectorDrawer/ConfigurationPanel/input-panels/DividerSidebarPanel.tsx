@@ -32,11 +32,20 @@ export default function DividerSidebarPanel({ data, setData }: DividerSidebarPan
 
   return (
     <BaseSidebarPanel title="Divider block">
-      <ColorInput
-        label="Color"
-        defaultValue={lineColor}
-        onChange={(lineColor) => updateData({ ...data, props: { ...data.props, lineColor } })}
-      />
+
+      <div style={{ display: 'flex', gap: '5rem' }}>
+        <ColorInput
+          label="Line color"
+          defaultValue={lineColor}
+          onChange={(lineColor) => updateData({ ...data, props: { ...data.props, lineColor } })}
+        />
+        <MultiStylePropertyPanel
+          names={['backgroundColor']}
+          value={data.style}
+          onChange={(style) => updateData({ ...data, style })}
+        />
+      </div>
+      
       <SliderInput
         label="Height"
         iconLabel={<HeightOutlined sx={{ color: 'text.secondary' }} />}
@@ -48,7 +57,7 @@ export default function DividerSidebarPanel({ data, setData }: DividerSidebarPan
         onChange={(lineHeight) => updateData({ ...data, props: { ...data.props, lineHeight } })}
       />
       <MultiStylePropertyPanel
-        names={['backgroundColor', 'padding']}
+        names={['padding']}
         value={data.style}
         onChange={(style) => updateData({ ...data, style })}
       />

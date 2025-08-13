@@ -34,6 +34,21 @@ export default function AvatarSidebarPanel({ data, setData }: AvatarSidebarPanel
 
   return (
     <BaseSidebarPanel title="Avatar block">
+      <TextInput
+        label="Image URL"
+        defaultValue={imageUrl}
+        onChange={(imageUrl) => {
+          updateData({ ...data, props: { ...data.props, imageUrl } });
+        }}
+      />
+      <TextInput
+        label="Alt text"
+        defaultValue={alt}
+        onChange={(alt) => {
+          updateData({ ...data, props: { ...data.props, alt } });
+        }}
+      />
+
       <SliderInput
         label="Size"
         iconLabel={<AspectRatioOutlined sx={{ color: 'text.secondary' }} />}
@@ -57,20 +72,6 @@ export default function AvatarSidebarPanel({ data, setData }: AvatarSidebarPanel
         <ToggleButton value="square">Square</ToggleButton>
         <ToggleButton value="rounded">Rounded</ToggleButton>
       </RadioGroupInput>
-      <TextInput
-        label="Image URL"
-        defaultValue={imageUrl}
-        onChange={(imageUrl) => {
-          updateData({ ...data, props: { ...data.props, imageUrl } });
-        }}
-      />
-      <TextInput
-        label="Alt text"
-        defaultValue={alt}
-        onChange={(alt) => {
-          updateData({ ...data, props: { ...data.props, alt } });
-        }}
-      />
 
       <MultiStylePropertyPanel
         names={['textAlign', 'padding']}

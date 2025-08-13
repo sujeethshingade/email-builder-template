@@ -70,8 +70,14 @@ export default function ImageSidebarPanel({ data, setData }: ImageSidebarPanelPr
         />
       </Stack>
 
+      <MultiStylePropertyPanel
+        names={['backgroundColor']}
+        value={data.style}
+        onChange={(style) => updateData({ ...data, style })}
+      />
+
       <RadioGroupInput
-        label="Alignment"
+        label="Position"
         defaultValue={data.props?.contentAlignment ?? 'middle'}
         onChange={(contentAlignment) => updateData({ ...data, props: { ...data.props, contentAlignment } })}
       >
@@ -87,7 +93,7 @@ export default function ImageSidebarPanel({ data, setData }: ImageSidebarPanelPr
       </RadioGroupInput>
 
       <MultiStylePropertyPanel
-        names={['backgroundColor', 'textAlign', 'padding']}
+        names={['textAlign', 'padding']}
         value={data.style}
         onChange={(style) => updateData({ ...data, style })}
       />

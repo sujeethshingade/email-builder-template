@@ -33,26 +33,32 @@ export default function EmailLayoutSidebarFields({ data, setData }: EmailLayoutS
 
   return (
     <BaseSidebarPanel title="Global">
-      <ColorInput
-        label="Backdrop color"
-        defaultValue={data.backdropColor ?? '#F5F5F5'}
-        onChange={(backdropColor) => updateData({ ...data, backdropColor })}
-      />
-      <ColorInput
-        label="Text color"
-        defaultValue={data.textColor ?? '#262626'}
-        onChange={(textColor) => updateData({ ...data, textColor })}
-      />
-      <ColorInput
-        label="Canvas color"
-        defaultValue={data.canvasColor ?? '#FFFFFF'}
-        onChange={(canvasColor) => updateData({ ...data, canvasColor })}
-      />
-      <NullableColorInput
-        label="Canvas border color"
-        defaultValue={data.borderColor ?? null}
-        onChange={(borderColor) => updateData({ ...data, borderColor })}
-      />
+      <div style={{ display: 'flex', gap: '40px' }}>
+        <ColorInput
+          label="Backdrop color"
+          defaultValue={data.backdropColor ?? '#F5F5F5'}
+          onChange={(backdropColor) => updateData({ ...data, backdropColor })}
+        />
+        <ColorInput
+          label="Text color"
+          defaultValue={data.textColor ?? '#262626'}
+          onChange={(textColor) => updateData({ ...data, textColor })}
+        />
+      </div>
+
+      <div style={{ display: 'flex', gap: '55px' }}>
+        <ColorInput
+          label="Canvas color"
+          defaultValue={data.canvasColor ?? '#FFFFFF'}
+          onChange={(canvasColor) => updateData({ ...data, canvasColor })}
+        />
+        <NullableColorInput
+          label="Canvas border color"
+          defaultValue={data.borderColor ?? null}
+          onChange={(borderColor) => updateData({ ...data, borderColor })}
+        />
+      </div>
+
       <SliderInput
         iconLabel={<RoundedCornerOutlined />}
         units="px"

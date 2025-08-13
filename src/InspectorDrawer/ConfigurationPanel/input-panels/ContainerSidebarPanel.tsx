@@ -25,8 +25,22 @@ export default function ContainerSidebarPanel({ data, setData }: ContainerSideba
   };
   return (
     <BaseSidebarPanel title="Container block">
+
+      <div style={{ display: 'flex', gap: '5rem' }}>
+        <MultiStylePropertyPanel
+          names={['borderColor']}
+          value={data.style}
+          onChange={(style) => updateData({ ...data, style })}
+        />
+        <MultiStylePropertyPanel
+          names={['backgroundColor']}
+          value={data.style}
+          onChange={(style) => updateData({ ...data, style })}
+        />
+      </div>
+
       <MultiStylePropertyPanel
-        names={['backgroundColor', 'borderColor', 'borderRadius', 'padding']}
+        names={['borderRadius', 'padding']}
         value={data.style}
         onChange={(style) => updateData({ ...data, style })}
       />
