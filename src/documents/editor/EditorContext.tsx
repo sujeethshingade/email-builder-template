@@ -18,6 +18,12 @@ type TValue = {
   inspectorDrawerOpen: boolean;
   samplesDrawerOpen: boolean;
   isInitialized: boolean;
+  
+  // Add document metadata to store editing state
+  documentMeta: {
+    selectedTab?: string;
+    savedTabBeforeEditing?: string;
+  };
 };
 
 const editorStateStore = create<TValue>(() => ({
@@ -30,6 +36,9 @@ const editorStateStore = create<TValue>(() => ({
   inspectorDrawerOpen: true,
   samplesDrawerOpen: true,
   isInitialized: false,
+  
+  // Initialize document metadata
+  documentMeta: {}
 }));
 
 // Custom hook to initialize the document on the client side
@@ -47,6 +56,14 @@ export function useEditorInitialization() {
 
 export function useDocument() {
   return editorStateStore((s) => s.document);
+}
+
+export function useDocumentMeta() {
+  return editorStateStore((s) => s.documentMeta);
+}
+
+export function setDocumentMeta(documentMeta: TValue['documentMeta']) {
+  return editorStateStore.setState({ documentMeta });
 }
 
 export function useSelectedBlockId() {
@@ -78,11 +95,18 @@ export function useSamplesDrawerOpen() {
 }
 
 export function setSelectedBlockId(selectedBlockId: TValue['selectedBlockId']) {
-  const selectedSidebarTab = selectedBlockId === null ? 'styles' : 'block-configuration';
+  const currentState = editorStateStore.getState();
+  
+  // Only change to block-configuration if not already on it and a block is selected
+  const selectedSidebarTab = selectedBlockId === null ? 'styles' : 
+    (currentState.selectedSidebarTab === 'styles' && selectedBlockId !== null) ? 'block-configuration' : 
+    currentState.selectedSidebarTab;
+  
   const options: Partial<TValue> = {};
   if (selectedBlockId !== null) {
     options.inspectorDrawerOpen = true;
   }
+  
   return editorStateStore.setState({
     selectedBlockId,
     selectedSidebarTab,
@@ -95,20 +119,26 @@ export function setSidebarTab(selectedSidebarTab: TValue['selectedSidebarTab']) 
 }
 
 export function resetDocument(document: TValue['document']) {
+  const currentState = editorStateStore.getState();
+  
   return editorStateStore.setState({
     document,
-    selectedSidebarTab: 'styles',
     selectedBlockId: null,
+    selectedSidebarTab: currentState.selectedSidebarTab
   });
 }
 
 export function setDocument(document: TValue['document']) {
-  const originalDocument = editorStateStore.getState().document;
+  const currentState = editorStateStore.getState();
+  const originalDocument = currentState.document;
+  
+  // Keep the current sidebar tab when updating document
   return editorStateStore.setState({
     document: {
       ...originalDocument,
       ...document,
     },
+    selectedSidebarTab: currentState.selectedSidebarTab
   });
 }
 

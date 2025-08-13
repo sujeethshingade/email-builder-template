@@ -4,11 +4,11 @@ import { z } from 'zod';
 import { Avatar, AvatarPropsSchema } from '@usewaypoint/block-avatar';
 import { Button, ButtonPropsSchema } from '@usewaypoint/block-button';
 import { Divider, DividerPropsSchema } from '@usewaypoint/block-divider';
-import { Heading, HeadingPropsSchema } from '@usewaypoint/block-heading';
+import { HeadingPropsSchema } from '@usewaypoint/block-heading';
 import { Html, HtmlPropsSchema } from '@usewaypoint/block-html';
 import { Image, ImagePropsSchema } from '@usewaypoint/block-image';
 import { Spacer, SpacerPropsSchema } from '@usewaypoint/block-spacer';
-import { Text, TextPropsSchema } from '@usewaypoint/block-text';
+import { TextPropsSchema } from '@usewaypoint/block-text';
 import {
   buildBlockComponent,
   buildBlockConfigurationDictionary,
@@ -21,6 +21,8 @@ import ContainerEditor from '../blocks/Container/ContainerEditor';
 import ContainerPropsSchema from '../blocks/Container/ContainerPropsSchema';
 import EmailLayoutEditor from '../blocks/EmailLayout/EmailLayoutEditor';
 import EmailLayoutPropsSchema from '../blocks/EmailLayout/EmailLayoutPropsSchema';
+import Heading from '../blocks/Heading/Heading';
+import Text from '../blocks/Text/Text';
 import EditorBlockWrapper from '../blocks/helpers/block-wrappers/EditorBlockWrapper';
 
 const EDITOR_DICTIONARY = buildBlockConfigurationDictionary({
