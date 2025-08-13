@@ -39,6 +39,11 @@ export default function EmailLayoutSidebarFields({ data, setData }: EmailLayoutS
         onChange={(backdropColor) => updateData({ ...data, backdropColor })}
       />
       <ColorInput
+        label="Text color"
+        defaultValue={data.textColor ?? '#262626'}
+        onChange={(textColor) => updateData({ ...data, textColor })}
+      />
+      <ColorInput
         label="Canvas color"
         defaultValue={data.canvasColor ?? '#FFFFFF'}
         onChange={(canvasColor) => updateData({ ...data, canvasColor })}
@@ -63,11 +68,6 @@ export default function EmailLayoutSidebarFields({ data, setData }: EmailLayoutS
         label="Font family"
         defaultValue="MODERN_SANS"
         onChange={(fontFamily) => updateData({ ...data, fontFamily })}
-      />
-      <ColorInput
-        label="Text color"
-        defaultValue={data.textColor ?? '#262626'}
-        onChange={(textColor) => updateData({ ...data, textColor })}
       />
     </BaseSidebarPanel>
   );
