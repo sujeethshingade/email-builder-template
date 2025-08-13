@@ -49,6 +49,7 @@ export default function ColumnsContainerPanel({ data, setData }: ColumnsContaine
         <ToggleButton value="3">3</ToggleButton>
       </RadioGroupInput>
       <ColumnWidthsInput
+        columnsCount={data.props?.columnsCount ?? 2}
         defaultValue={data.props?.fixedWidths}
         onChange={(fixedWidths) => {
           updateData({ ...data, props: { ...data.props, fixedWidths } });
@@ -66,7 +67,7 @@ export default function ColumnsContainerPanel({ data, setData }: ColumnsContaine
         onChange={(columnsGap) => updateData({ ...data, props: { ...data.props, columnsGap } })}
       />
       <RadioGroupInput
-        label="Alignment"
+        label="Position"
         defaultValue={data.props?.contentAlignment ?? 'middle'}
         onChange={(contentAlignment) => {
           updateData({ ...data, props: { ...data.props, contentAlignment } });

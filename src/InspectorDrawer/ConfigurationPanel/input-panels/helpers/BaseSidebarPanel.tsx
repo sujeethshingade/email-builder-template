@@ -9,10 +9,10 @@ type SidebarPanelProps = {
 export default function BaseSidebarPanel({ title, children }: SidebarPanelProps) {
   return (
     <Box p={2}>
-      <Typography variant="overline" color="text.secondary" sx={{ display: 'block', mb: 2 }}>
+      <Typography variant="overline" color="text.secondary" sx={{ display: 'block', mb: 1 }}>
         {title}
       </Typography>
-      <Stack spacing={5} mb={3}>
+      <Stack spacing={3} mb={3}>
         {children}
       </Stack>
     </Box>

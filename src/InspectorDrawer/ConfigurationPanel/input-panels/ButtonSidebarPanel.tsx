@@ -49,6 +49,23 @@ export default function ButtonSidebarPanel({ data, setData }: ButtonSidebarPanel
         defaultValue={url}
         onChange={(url) => updateData({ ...data, props: { ...data.props, url } })}
       />
+      <div style={{ display: 'flex', alignItems: 'right', gap: '5rem' }}>
+        <ColorInput
+          label="Text color"
+          defaultValue={buttonTextColor}
+          onChange={(buttonTextColor) => updateData({ ...data, props: { ...data.props, buttonTextColor } })}
+        />
+        <ColorInput
+          label="Button color"
+          defaultValue={buttonBackgroundColor}
+          onChange={(buttonBackgroundColor) => updateData({ ...data, props: { ...data.props, buttonBackgroundColor } })}
+        />
+      </div>
+      <MultiStylePropertyPanel
+         names={['backgroundColor']}
+         value={data.style}
+         onChange={(style) => updateData({ ...data, style })}
+       />
       <RadioGroupInput
         label="Width"
         defaultValue={fullWidth ? 'FULL_WIDTH' : 'AUTO'}
@@ -76,18 +93,9 @@ export default function ButtonSidebarPanel({ data, setData }: ButtonSidebarPanel
         <ToggleButton value="rounded">Rounded</ToggleButton>
         <ToggleButton value="pill">Pill</ToggleButton>
       </RadioGroupInput>
-      <ColorInput
-        label="Text color"
-        defaultValue={buttonTextColor}
-        onChange={(buttonTextColor) => updateData({ ...data, props: { ...data.props, buttonTextColor } })}
-      />
-      <ColorInput
-        label="Button color"
-        defaultValue={buttonBackgroundColor}
-        onChange={(buttonBackgroundColor) => updateData({ ...data, props: { ...data.props, buttonBackgroundColor } })}
-      />
+
       <MultiStylePropertyPanel
-        names={['backgroundColor', 'fontFamily', 'fontSize', 'fontWeight', 'textAlign', 'padding']}
+        names={['textAlign', 'fontWeight', 'fontFamily', 'fontSize', 'padding']}
         value={data.style}
         onChange={(style) => updateData({ ...data, style })}
       />
