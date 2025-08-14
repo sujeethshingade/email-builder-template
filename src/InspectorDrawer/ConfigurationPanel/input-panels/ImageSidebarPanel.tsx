@@ -1,16 +1,10 @@
 "use client";
 import React, { useState } from 'react';
 
-import {
-  VerticalAlignBottomOutlined,
-  VerticalAlignCenterOutlined,
-  VerticalAlignTopOutlined,
-} from '@mui/icons-material';
-import { Stack, ToggleButton } from '@mui/material';
+import { Stack } from '@mui/material';
 import { ImageProps, ImagePropsSchema } from '@usewaypoint/block-image';
 
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
-import RadioGroupInput from './helpers/inputs/RadioGroupInput';
 import TextDimensionInput from './helpers/inputs/TextDimensionInput';
 import TextInput from './helpers/inputs/TextInput';
 import MultiStylePropertyPanel from './helpers/style-inputs/MultiStylePropertyPanel';
@@ -75,22 +69,6 @@ export default function ImageSidebarPanel({ data, setData }: ImageSidebarPanelPr
         value={data.style}
         onChange={(style) => updateData({ ...data, style })}
       />
-
-      <RadioGroupInput
-        label="Position"
-        defaultValue={data.props?.contentAlignment ?? 'middle'}
-        onChange={(contentAlignment) => updateData({ ...data, props: { ...data.props, contentAlignment } })}
-      >
-        <ToggleButton value="top">
-          <VerticalAlignTopOutlined fontSize="small" />
-        </ToggleButton>
-        <ToggleButton value="middle">
-          <VerticalAlignCenterOutlined fontSize="small" />
-        </ToggleButton>
-        <ToggleButton value="bottom">
-          <VerticalAlignBottomOutlined fontSize="small" />
-        </ToggleButton>
-      </RadioGroupInput>
 
       <MultiStylePropertyPanel
         names={['textAlign', 'padding']}

@@ -57,7 +57,7 @@ export const BUTTONS: TButtonProps[] = [
       data: {
         props: {
           text: 'Button',
-          url: 'https://www.usewaypoint.com',
+          url: '',
         },
         style: { padding: { top: 16, bottom: 16, left: 24, right: 24 } },
       },
@@ -70,8 +70,8 @@ export const BUTTONS: TButtonProps[] = [
       type: 'Image',
       data: {
         props: {
-          url: 'https://assets.usewaypoint.com/sample-image.jpg',
-          alt: 'Sample product',
+          url: 'https://tinyurl.com/image-email',
+          alt: 'Image',
           contentAlignment: 'middle',
           linkHref: null,
         },
@@ -86,7 +86,7 @@ export const BUTTONS: TButtonProps[] = [
       type: 'Avatar',
       data: {
         props: {
-          imageUrl: 'https://ui-avatars.com/api/?size=128',
+          imageUrl: 'https://tinyurl.com/email-avatar',
           shape: 'circle',
         },
         style: { padding: { top: 16, bottom: 16, left: 24, right: 24 } },

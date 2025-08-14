@@ -33,22 +33,8 @@ export default function HtmlSidebarPanel({ data, setData }: HtmlSidebarPanelProp
         defaultValue={data.props?.contents ?? ''}
         onChange={(contents) => updateData({ ...data, props: { ...data.props, contents } })}
       />
-
-      <div style={{ display: 'flex', gap: '5rem' }}>
-        <MultiStylePropertyPanel
-          names={['color']}
-          value={data.style}
-          onChange={(style) => updateData({ ...data, style })}
-        />
-        <MultiStylePropertyPanel
-          names={['backgroundColor']}
-          value={data.style}
-          onChange={(style) => updateData({ ...data, style })}
-        />
-      </div>
-
       <MultiStylePropertyPanel
-        names={['textAlign', 'fontFamily', 'fontSize', 'padding']}
+        names={['backgroundColor', 'padding']}
         value={data.style}
         onChange={(style) => updateData({ ...data, style })}
       />
