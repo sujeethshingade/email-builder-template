@@ -18,6 +18,10 @@ type TValue = {
   inspectorDrawerOpen: boolean;
   samplesDrawerOpen: boolean;
   isInitialized: boolean;
+
+  history: TEditorConfiguration[];
+  historyIndex: number;
+  maxHistorySize: number;
 };
 
 const editorStateStore = create<TValue>(() => ({
@@ -30,6 +34,10 @@ const editorStateStore = create<TValue>(() => ({
   inspectorDrawerOpen: true,
   samplesDrawerOpen: true,
   isInitialized: false,
+
+  history: [],
+  historyIndex: -1,
+  maxHistorySize: 100,
 }));
 
 // Custom hook to initialize the document on the client side
@@ -39,7 +47,9 @@ export function useEditorInitialization() {
       const document = getConfiguration(window.location.hash);
       editorStateStore.setState({ 
         document,
-        isInitialized: true 
+        isInitialized: true,
+        history: [document],
+        historyIndex: 0,
       });
     }
   }, []);
@@ -77,6 +87,14 @@ export function useSamplesDrawerOpen() {
   return editorStateStore((s) => s.samplesDrawerOpen);
 }
 
+export function useCanUndo() {
+  return editorStateStore((s) => s.historyIndex > 0);
+}
+
+export function useCanRedo() {
+  return editorStateStore((s) => s.historyIndex < s.history.length - 1);
+}
+
 export function setSelectedBlockId(selectedBlockId: TValue['selectedBlockId']) {
   const selectedSidebarTab = selectedBlockId === null ? 'styles' : 'block-configuration';
   const options: Partial<TValue> = {};
@@ -99,16 +117,93 @@ export function resetDocument(document: TValue['document']) {
     document,
     selectedSidebarTab: 'styles',
     selectedBlockId: null,
+    history: [document],
+    historyIndex: 0,
   });
 }
 
 export function setDocument(document: TValue['document']) {
-  const originalDocument = editorStateStore.getState().document;
+  const currentState = editorStateStore.getState();
+  const originalDocument = currentState.document;
+  const newDocument = {
+    ...originalDocument,
+    ...document,
+  };
+
+  if (JSON.stringify(newDocument) === JSON.stringify(originalDocument)) {
+    return;
+  }
+
+  const newHistory = currentState.history.slice(0, currentState.historyIndex + 1);
+  newHistory.push(newDocument);
+
+  if (newHistory.length > currentState.maxHistorySize) {
+    newHistory.shift();
+  } else {
+    return editorStateStore.setState({
+      document: newDocument,
+      history: newHistory,
+      historyIndex: newHistory.length - 1,
+    });
+  }
+
   return editorStateStore.setState({
-    document: {
-      ...originalDocument,
-      ...document,
-    },
+    document: newDocument,
+    history: newHistory,
+    historyIndex: newHistory.length - 1,
+  });
+}
+
+export function undo() {
+  const currentState = editorStateStore.getState();
+  if (currentState.historyIndex > 0) {
+    const newIndex = currentState.historyIndex - 1;
+    const previousDocument = currentState.history[newIndex];
+    editorStateStore.setState({
+      document: previousDocument,
+      historyIndex: newIndex,
+      selectedBlockId: null, 
+    });
+  }
+}
+
+export function redo() {
+  const currentState = editorStateStore.getState();
+  if (currentState.historyIndex < currentState.history.length - 1) {
+    const newIndex = currentState.historyIndex + 1;
+    const nextDocument = currentState.history[newIndex];
+    editorStateStore.setState({
+      document: nextDocument,
+      historyIndex: newIndex,
+      selectedBlockId: null,
+    });
+  }
+}
+
+export function setDocumentWithHistory(newDocument: TValue['document']) {
+  const currentState = editorStateStore.getState();
+
+  if (JSON.stringify(newDocument) === JSON.stringify(currentState.document)) {
+    return;
+  }
+
+  const newHistory = currentState.history.slice(0, currentState.historyIndex + 1);
+  newHistory.push(newDocument);
+
+  if (newHistory.length > currentState.maxHistorySize) {
+    newHistory.shift();
+  } else {
+    return editorStateStore.setState({
+      document: newDocument,
+      history: newHistory,
+      historyIndex: newHistory.length - 1,
+    });
+  }
+
+  return editorStateStore.setState({
+    document: newDocument,
+    history: newHistory,
+    historyIndex: newHistory.length - 1,
   });
 }
 

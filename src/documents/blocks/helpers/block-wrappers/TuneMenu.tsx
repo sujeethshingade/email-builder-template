@@ -4,7 +4,7 @@ import { ArrowDownwardOutlined, ArrowUpwardOutlined, DeleteOutlined, ContentCopy
 import { IconButton, Paper, Stack, SxProps, Tooltip } from '@mui/material';
 
 import { TEditorBlock } from '../../../editor/core';
-import { resetDocument, setSelectedBlockId, useDocument } from '../../../editor/EditorContext';
+import { setDocumentWithHistory, setSelectedBlockId, useDocument } from '../../../editor/EditorContext';
 import { ColumnsContainerProps } from '../../ColumnsContainer/ColumnsContainerPropsSchema';
 
 const sx: SxProps = {
@@ -106,7 +106,7 @@ export default function TuneMenu({ blockId }: Props) {
       }
     }
     delete nDocument[blockId];
-    resetDocument(nDocument);
+    setDocumentWithHistory(nDocument);
   };
 
   const handleDuplicateClick = () => {
@@ -181,7 +181,7 @@ export default function TuneMenu({ blockId }: Props) {
       }
     }
     
-    resetDocument(nDocument);
+    setDocumentWithHistory(nDocument);
     setSelectedBlockId(newBlockId);
   };
 
@@ -249,7 +249,7 @@ export default function TuneMenu({ blockId }: Props) {
       }
     }
 
-    resetDocument(nDocument);
+    setDocumentWithHistory(nDocument);
     setSelectedBlockId(blockId);
   };
 
