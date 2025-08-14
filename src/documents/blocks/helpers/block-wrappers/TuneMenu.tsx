@@ -28,6 +28,30 @@ const generateId = () => {
 export default function TuneMenu({ blockId }: Props) {
   const document = useDocument();
 
+  // Check if the current block is in a container/column with only one child
+  const isSingleComponentInContainer = () => {
+    for (const [id, block] of Object.entries(document)) {
+      if (id === blockId) continue;
+      
+      const typedBlock = block as TEditorBlock;
+      
+      // Checking Container with only one child
+      if (typedBlock.type === 'Container' && typedBlock.data.props?.childrenIds?.includes(blockId)) {
+        return (typedBlock.data.props.childrenIds?.length || 0) <= 1;
+      }
+      
+      // Checking ColumnsContainer column with only one child
+      if (typedBlock.type === 'ColumnsContainer' && typedBlock.data.props?.columns) {
+        for (const column of typedBlock.data.props.columns) {
+          if (column.childrenIds?.includes(blockId)) {
+            return (column.childrenIds?.length || 0) <= 1;
+          }
+        }
+      }
+    }
+    return false;
+  };
+
   const handleDeleteClick = () => {
     const filterChildrenIds = (childrenIds: string[] | null | undefined) => {
       if (!childrenIds) {
@@ -229,19 +253,25 @@ export default function TuneMenu({ blockId }: Props) {
     setSelectedBlockId(blockId);
   };
 
+  const shouldHideMoveButtons = isSingleComponentInContainer();
+
   return (
     <Paper sx={sx} onClick={(ev) => ev.stopPropagation()}>
       <Stack>
-        <Tooltip title="Move Up" placement="left-start">
-          <IconButton onClick={() => handleMoveClick('up')} sx={{ color: 'text.secondary' }}>
-            <ArrowUpwardOutlined fontSize="small" />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Move Down" placement="left-start">
-          <IconButton onClick={() => handleMoveClick('down')} sx={{ color: 'text.secondary' }}>
-            <ArrowDownwardOutlined fontSize="small" />
-          </IconButton>
-        </Tooltip>
+        {!shouldHideMoveButtons && (
+          <>
+            <Tooltip title="Move Up" placement="left-start">
+              <IconButton onClick={() => handleMoveClick('up')} sx={{ color: 'text.secondary' }}>
+                <ArrowUpwardOutlined fontSize="small" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Move Down" placement="left-start">
+              <IconButton onClick={() => handleMoveClick('down')} sx={{ color: 'text.secondary' }}>
+                <ArrowDownwardOutlined fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          </>
+        )}
         <Tooltip title="Duplicate" placement="left-start">
           <IconButton onClick={handleDuplicateClick} sx={{ color: 'text.secondary' }}>
             <ContentCopyOutlined fontSize="small" />
