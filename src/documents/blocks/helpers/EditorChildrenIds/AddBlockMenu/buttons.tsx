@@ -154,7 +154,4 @@ export const BUTTONS: TButtonProps[] = [
       },
     }),
   },
-
-  // { label: 'ProgressBar', icon: <ProgressBarOutlined />, block: () => ({}) },
-  // { label: 'LoopContainer', icon: <ViewListOutlined />, block: () => ({}) },
 ];
