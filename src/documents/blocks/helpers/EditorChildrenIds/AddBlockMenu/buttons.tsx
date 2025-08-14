@@ -137,7 +137,7 @@ export const BUTTONS: TButtonProps[] = [
       data: {
         props: {
           columnsGap: 16,
-          columnsCount: 3,
+          columnsCount: 2,
           columns: [{ childrenIds: [] }, { childrenIds: [] }, { childrenIds: [] }],
         },
         style: { padding: { top: 16, bottom: 16, left: 24, right: 24 } },
