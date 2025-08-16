@@ -19,14 +19,18 @@ export default function SamplesDrawer() {
         return (
           <Stack alignItems="flex-start" spacing={0.25}>
             <SidebarButton href="#">Blank Canvas</SidebarButton>
-            <SidebarButton href="#">Placeholder</SidebarButton>
+            <SidebarButton href="#sample/basic-b1">Basic B1</SidebarButton>
+            <SidebarButton href="#sample/basic-b2">Basic B2</SidebarButton>
+            <SidebarButton href="#sample/basic-b3">Basic B3</SidebarButton>
+            <SidebarButton href="#sample/basic-b4">Basic B4</SidebarButton>
+            <SidebarButton href="#sample/basic-b5">Basic B5</SidebarButton>
           </Stack>
         );
       case 'predesigned':
         return (
           <Stack alignItems="flex-start" spacing={0.25}>
             <SidebarButton href="#">Blank Canvas</SidebarButton>
-            <SidebarButton href="#sample/welcome">Welcome email</SidebarButton>
+            <SidebarButton href="#sample/welcome">Welcome Email</SidebarButton>
             <SidebarButton href="#sample/one-time-password">One-time passcode (OTP)</SidebarButton>
             <SidebarButton href="#sample/reset-password">Reset password</SidebarButton>
             <SidebarButton href="#sample/order-ecomerce">E-commerce receipt</SidebarButton>

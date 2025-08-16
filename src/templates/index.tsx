@@ -7,6 +7,11 @@ import RESET_PASSWORD from './sample/reset-password';
 import RESPOND_TO_MESSAGE from './sample/respond-to-message';
 import SUBSCRIPTION_RECEIPT from './sample/subscription-receipt';
 import WELCOME from './sample/welcome';
+import BASIC_B1 from './sample/basic-b1';
+import BASIC_B2 from './sample/basic-b2';
+import BASIC_B3 from './sample/basic-b3';
+import BASIC_B4 from './sample/basic-b4';
+import BASIC_B5 from './sample/basic-b5';
 
 export default function getConfiguration(template: string) {
   if (template.startsWith('#sample/')) {
@@ -28,6 +33,16 @@ export default function getConfiguration(template: string) {
         return RESPOND_TO_MESSAGE;
       case 'subscription-receipt':
         return SUBSCRIPTION_RECEIPT;
+      case 'basic-b1':
+        return BASIC_B1;
+      case 'basic-b2':
+        return BASIC_B2;
+      case 'basic-b3':
+        return BASIC_B3;
+      case 'basic-b4':
+        return BASIC_B4;
+      case 'basic-b5':
+        return BASIC_B5;
     }
   }
 
