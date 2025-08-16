@@ -31,13 +31,6 @@ export default function SamplesDrawer() {
           <Stack alignItems="flex-start" spacing={0.25}>
             <SidebarButton href="#">Blank Canvas</SidebarButton>
             <SidebarButton href="#sample/welcome">Welcome Email</SidebarButton>
-            <SidebarButton href="#sample/one-time-password">One-time passcode (OTP)</SidebarButton>
-            <SidebarButton href="#sample/reset-password">Reset password</SidebarButton>
-            <SidebarButton href="#sample/order-ecomerce">E-commerce receipt</SidebarButton>
-            <SidebarButton href="#sample/subscription-receipt">Subscription receipt</SidebarButton>
-            <SidebarButton href="#sample/reservation-reminder">Reservation reminder</SidebarButton>
-            <SidebarButton href="#sample/post-metrics-report">Post metrics</SidebarButton>
-            <SidebarButton href="#sample/respond-to-message">Respond to inquiry</SidebarButton>
           </Stack>
         );
       default:

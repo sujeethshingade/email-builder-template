@@ -1,6 +1,6 @@
 import { TEditorConfiguration } from '../../documents/editor/core';
 
-const EMPTY_EMAIL_MESSAGE: TEditorConfiguration = {
+const BLANK_CANVAS: TEditorConfiguration = {
   root: {
     type: 'EmailLayout',
     data: {
@@ -13,4 +13,4 @@ const EMPTY_EMAIL_MESSAGE: TEditorConfiguration = {
   },
 };
 
-export default EMPTY_EMAIL_MESSAGE;
+export default BLANK_CANVAS;
