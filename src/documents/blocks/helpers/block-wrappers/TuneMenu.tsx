@@ -22,7 +22,7 @@ type Props = {
 };
 
 const generateId = () => {
-  return `block_${Math.random().toString(36).substr(2, 9)}`;
+  return `block-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 };
 
 export default function TuneMenu({ blockId }: Props) {
@@ -112,12 +112,50 @@ export default function TuneMenu({ blockId }: Props) {
   const handleDuplicateClick = () => {
     const nDocument: typeof document = { ...document };
     
-    const newBlockId = generateId();
+    // Recursive function to duplicate a block and all its children
+    const duplicateBlockRecursively = (originalBlockId: string): string => {
+      const originalBlock = document[originalBlockId] as TEditorBlock;
+      const newId = generateId();
+      
+      // Create a deep copy of the original block
+      const duplicatedBlock = JSON.parse(JSON.stringify(originalBlock));
+      
+      // Ensure any internal IDs are also regenerated if they exist
+      if (duplicatedBlock.data.props?.id) {
+        duplicatedBlock.data.props.id = generateId();
+      }
+      
+      // Handle Container blocks with children
+      if (duplicatedBlock.type === 'Container' && duplicatedBlock.data.props?.childrenIds?.length > 0) {
+        const newChildrenIds: string[] = [];
+        duplicatedBlock.data.props.childrenIds.forEach((childId: string) => {
+          const newChildId = duplicateBlockRecursively(childId);
+          newChildrenIds.push(newChildId);
+        });
+        duplicatedBlock.data.props.childrenIds = newChildrenIds;
+      }
+      
+      // Handle ColumnsContainer blocks with column children
+      if (duplicatedBlock.type === 'ColumnsContainer' && duplicatedBlock.data.props?.columns) {
+        duplicatedBlock.data.props.columns = duplicatedBlock.data.props.columns.map((column: any) => {
+          if (!column.childrenIds?.length) return column;
+          
+          const newColumnChildrenIds: string[] = [];
+          column.childrenIds.forEach((childId: string) => {
+            const newChildId = duplicateBlockRecursively(childId);
+            newColumnChildrenIds.push(newChildId);
+          });
+          
+          return { ...column, childrenIds: newColumnChildrenIds };
+        });
+      }
+      
+      nDocument[newId] = duplicatedBlock;
+      return newId;
+    };
     
-    const originalBlock = document[blockId] as TEditorBlock;
-    const duplicatedBlock = JSON.parse(JSON.stringify(originalBlock));
-    
-    nDocument[newBlockId] = duplicatedBlock;
+    // Start the recursive duplication process
+    const newBlockId = duplicateBlockRecursively(blockId);
     
     const insertDuplicateAfterOriginal = (childrenIds: string[] | null | undefined) => {
       if (!childrenIds) {
