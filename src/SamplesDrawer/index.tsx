@@ -29,10 +29,8 @@ export default function SamplesDrawer() {
       case 'predesigned':
         return (
           <Stack alignItems="flex-start" spacing={0.25}>
-            <SidebarButton href="#">Blank Canvas</SidebarButton>
-            <SidebarButton href="#sample/welcome">Welcome Email</SidebarButton>
-            <SidebarButton href="#sample/product-update">Product Update</SidebarButton>
             <SidebarButton href="#sample/sales-offer">Sales Offer</SidebarButton>
+            <SidebarButton href="#sample/product-update">Product Update</SidebarButton>
             <SidebarButton href="#sample/event-invite-one">Event Invite 1</SidebarButton>
             <SidebarButton href="#sample/event-invite-two">Event Invite 2</SidebarButton>
             <SidebarButton href="#sample/marketing-campaign-one">Marketing Campaign 1</SidebarButton>

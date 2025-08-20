@@ -4,7 +4,6 @@ import BASIC_B2 from './sample/basic-b2';
 import BASIC_B3 from './sample/basic-b3';
 import BASIC_B4 from './sample/basic-b4';
 import BASIC_B5 from './sample/basic-b5';
-import WELCOME from './sample/welcome';
 import DOWNTIME from './sample/downtime';
 import PRODUCT_UPDATE from './sample/product-update';
 import SALES_OFFER from './sample/sales-offer';
@@ -17,8 +16,6 @@ export default function getConfiguration(template: string) {
   if (template.startsWith('#sample/')) {
     const sampleName = template.replace('#sample/', '');
     switch (sampleName) {
-      case 'welcome':
-        return WELCOME;
       case 'product-update':
         return PRODUCT_UPDATE;
       case 'downtime':

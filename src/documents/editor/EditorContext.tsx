@@ -14,6 +14,7 @@ type TValue = {
   selectedSidebarTab: 'block-configuration' | 'styles';
   selectedMainTab: 'editor' | 'preview' | 'html';
   selectedScreenSize: 'desktop' | 'mobile';
+  currentTemplate: string;
 
   inspectorDrawerOpen: boolean;
   samplesDrawerOpen: boolean;
@@ -30,6 +31,7 @@ const editorStateStore = create<TValue>(() => ({
   selectedSidebarTab: 'styles',
   selectedMainTab: 'editor',
   selectedScreenSize: 'desktop',
+  currentTemplate: '',
 
   inspectorDrawerOpen: true,
   samplesDrawerOpen: true,
@@ -44,15 +46,43 @@ const editorStateStore = create<TValue>(() => ({
 export function useEditorInitialization() {
   useEffect(() => {
     if (!editorStateStore.getState().isInitialized) {
-      const document = getConfiguration(window.location.hash);
+      const currentTemplate = window.location.hash;
+      const document = getConfiguration(currentTemplate);
       editorStateStore.setState({ 
         document,
+        currentTemplate,
         isInitialized: true,
         history: [document],
         historyIndex: 0,
       });
     }
+
+    const handleHashChange = () => {
+      const newTemplate = window.location.hash;
+      const currentState = editorStateStore.getState();
+      if (currentState.currentTemplate !== newTemplate) {
+        const document = getConfiguration(newTemplate);
+        editorStateStore.setState({
+          document,
+          currentTemplate: newTemplate,
+          selectedSidebarTab: 'styles',
+          selectedBlockId: null,
+          history: [document],
+          historyIndex: 0,
+        });
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
   }, []);
+}
+
+export function useCurrentTemplate() {
+  return editorStateStore((s) => s.currentTemplate);
 }
 
 export function useDocument() {
@@ -112,9 +142,11 @@ export function setSidebarTab(selectedSidebarTab: TValue['selectedSidebarTab']) 
   return editorStateStore.setState({ selectedSidebarTab });
 }
 
-export function resetDocument(document: TValue['document']) {
+export function resetDocument(document: TValue['document'], templateHref?: string) {
+  const currentTemplate = templateHref || window.location.hash;
   return editorStateStore.setState({
     document,
+    currentTemplate,
     selectedSidebarTab: 'styles',
     selectedBlockId: null,
     history: [document],
