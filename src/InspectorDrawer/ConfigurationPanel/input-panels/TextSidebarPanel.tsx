@@ -4,9 +4,10 @@ import React, { useState } from 'react';
 import { TextProps, TextPropsSchema } from '@usewaypoint/block-text';
 
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
-import BooleanInput from './helpers/inputs/BooleanInput';
+import BooleanInputWithInfo from './helpers/inputs/BooleanInputWithInfo';
 import TextInput from './helpers/inputs/TextInput';
 import MultiStylePropertyPanel from './helpers/style-inputs/MultiStylePropertyPanel';
+import MarkdownHelp from './helpers/MarkdownHelp';
 import Zod from 'zod';
 
 type TextSidebarPanelProps = {
@@ -34,10 +35,11 @@ export default function TextSidebarPanel({ data, setData }: TextSidebarPanelProp
         defaultValue={data.props?.text ?? ''}
         onChange={(text) => updateData({ ...data, props: { ...data.props, text } })}
       />
-      <BooleanInput
+      <BooleanInputWithInfo
         label="Markdown"
         defaultValue={data.props?.markdown ?? false}
         onChange={(markdown) => updateData({ ...data, props: { ...data.props, markdown } })}
+        infoContent={<MarkdownHelp />}
       />
 
       <div style={{ display: 'flex', gap: '5rem' }}>
