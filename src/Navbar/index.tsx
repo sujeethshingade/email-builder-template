@@ -16,6 +16,8 @@ import ToggleSamplesPanelButton from '../SamplesDrawer/ToggleSamplesPanelButton'
 
 import HtmlPanel from './HtmlOutput';
 import TabsGroup from './TabsGroup';
+import KeyboardShortcuts from './KeyboardShortcuts';
+import UndoRedoButtons from './UndoRedoButtons';
 
 export default function Navbar() {
   const document = useDocument();
@@ -70,6 +72,7 @@ export default function Navbar() {
 
   return (
     <>
+      <KeyboardShortcuts />
       <Stack
         sx={{
           height: 49,
@@ -94,6 +97,7 @@ export default function Navbar() {
             Email Builder
           </Typography>
           <Stack direction="row" spacing={2}>
+            <UndoRedoButtons />
             <ToggleButtonGroup value={selectedScreenSize} exclusive size="small" onChange={handleScreenSizeChange}>
               <ToggleButton value="desktop">
                 <Tooltip title="Desktop View">

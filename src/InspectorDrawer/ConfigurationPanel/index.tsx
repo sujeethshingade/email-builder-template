@@ -19,7 +19,7 @@ import TextSidebarPanel from './input-panels/TextSidebarPanel';
 
 function renderMessage(val: string) {
   return (
-    <Box sx={{ m: 3, p: 1, border: '1px dashed', borderColor: 'divider' }}>
+    <Box sx={{ m: 3, p: 1, border: '1px dashed', borderColor: 'divider', borderRadius: 1}}>
       <Typography color="text.secondary">{val}</Typography>
     </Box>
   );

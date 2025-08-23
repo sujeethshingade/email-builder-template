@@ -4,7 +4,7 @@ import { ArrowDownwardOutlined, ArrowUpwardOutlined, DeleteOutlined, ContentCopy
 import { IconButton, Paper, Stack, SxProps, Tooltip } from '@mui/material';
 
 import { TEditorBlock } from '../../../editor/core';
-import { resetDocument, setSelectedBlockId, useDocument } from '../../../editor/EditorContext';
+import { setDocumentWithHistory, setSelectedBlockId, useDocument } from '../../../editor/EditorContext';
 import { ColumnsContainerProps } from '../../ColumnsContainer/ColumnsContainerPropsSchema';
 
 const sx: SxProps = {
@@ -22,11 +22,35 @@ type Props = {
 };
 
 const generateId = () => {
-  return `block_${Math.random().toString(36).substr(2, 9)}`;
+  return `block-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 };
 
 export default function TuneMenu({ blockId }: Props) {
   const document = useDocument();
+
+  // Check if the current block is in a container/column with only one child
+  const isSingleComponentInContainer = () => {
+    for (const [id, block] of Object.entries(document)) {
+      if (id === blockId) continue;
+      
+      const typedBlock = block as TEditorBlock;
+      
+      // Checking Container with only one child
+      if (typedBlock.type === 'Container' && typedBlock.data.props?.childrenIds?.includes(blockId)) {
+        return (typedBlock.data.props.childrenIds?.length || 0) <= 1;
+      }
+      
+      // Checking ColumnsContainer column with only one child
+      if (typedBlock.type === 'ColumnsContainer' && typedBlock.data.props?.columns) {
+        for (const column of typedBlock.data.props.columns) {
+          if (column.childrenIds?.includes(blockId)) {
+            return (column.childrenIds?.length || 0) <= 1;
+          }
+        }
+      }
+    }
+    return false;
+  };
 
   const handleDeleteClick = () => {
     const filterChildrenIds = (childrenIds: string[] | null | undefined) => {
@@ -82,18 +106,56 @@ export default function TuneMenu({ blockId }: Props) {
       }
     }
     delete nDocument[blockId];
-    resetDocument(nDocument);
+    setDocumentWithHistory(nDocument);
   };
 
   const handleDuplicateClick = () => {
     const nDocument: typeof document = { ...document };
     
-    const newBlockId = generateId();
+    // Recursive function to duplicate a block and all its children
+    const duplicateBlockRecursively = (originalBlockId: string): string => {
+      const originalBlock = document[originalBlockId] as TEditorBlock;
+      const newId = generateId();
+      
+      // Create a deep copy of the original block
+      const duplicatedBlock = JSON.parse(JSON.stringify(originalBlock));
+      
+      // Ensure any internal IDs are also regenerated if they exist
+      if (duplicatedBlock.data.props?.id) {
+        duplicatedBlock.data.props.id = generateId();
+      }
+      
+      // Handle Container blocks with children
+      if (duplicatedBlock.type === 'Container' && duplicatedBlock.data.props?.childrenIds?.length > 0) {
+        const newChildrenIds: string[] = [];
+        duplicatedBlock.data.props.childrenIds.forEach((childId: string) => {
+          const newChildId = duplicateBlockRecursively(childId);
+          newChildrenIds.push(newChildId);
+        });
+        duplicatedBlock.data.props.childrenIds = newChildrenIds;
+      }
+      
+      // Handle ColumnsContainer blocks with column children
+      if (duplicatedBlock.type === 'ColumnsContainer' && duplicatedBlock.data.props?.columns) {
+        duplicatedBlock.data.props.columns = duplicatedBlock.data.props.columns.map((column: any) => {
+          if (!column.childrenIds?.length) return column;
+          
+          const newColumnChildrenIds: string[] = [];
+          column.childrenIds.forEach((childId: string) => {
+            const newChildId = duplicateBlockRecursively(childId);
+            newColumnChildrenIds.push(newChildId);
+          });
+          
+          return { ...column, childrenIds: newColumnChildrenIds };
+        });
+      }
+      
+      nDocument[newId] = duplicatedBlock;
+      return newId;
+    };
     
-    const originalBlock = document[blockId] as TEditorBlock;
-    const duplicatedBlock = JSON.parse(JSON.stringify(originalBlock));
-    
-    nDocument[newBlockId] = duplicatedBlock;
+    // Start the recursive duplication process
+    const newBlockId = duplicateBlockRecursively(blockId);
     
     const insertDuplicateAfterOriginal = (childrenIds: string[] | null | undefined) => {
       if (!childrenIds) {
@@ -157,7 +219,7 @@ export default function TuneMenu({ blockId }: Props) {
       }
     }
     
-    resetDocument(nDocument);
+    setDocumentWithHistory(nDocument);
     setSelectedBlockId(newBlockId);
   };
 
@@ -225,23 +287,29 @@ export default function TuneMenu({ blockId }: Props) {
       }
     }
 
-    resetDocument(nDocument);
+    setDocumentWithHistory(nDocument);
     setSelectedBlockId(blockId);
   };
+
+  const shouldHideMoveButtons = isSingleComponentInContainer();
 
   return (
     <Paper sx={sx} onClick={(ev) => ev.stopPropagation()}>
       <Stack>
-        <Tooltip title="Move Up" placement="left-start">
-          <IconButton onClick={() => handleMoveClick('up')} sx={{ color: 'text.secondary' }}>
-            <ArrowUpwardOutlined fontSize="small" />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Move Down" placement="left-start">
-          <IconButton onClick={() => handleMoveClick('down')} sx={{ color: 'text.secondary' }}>
-            <ArrowDownwardOutlined fontSize="small" />
-          </IconButton>
-        </Tooltip>
+        {!shouldHideMoveButtons && (
+          <>
+            <Tooltip title="Move Up" placement="left-start">
+              <IconButton onClick={() => handleMoveClick('up')} sx={{ color: 'text.secondary' }}>
+                <ArrowUpwardOutlined fontSize="small" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Move Down" placement="left-start">
+              <IconButton onClick={() => handleMoveClick('down')} sx={{ color: 'text.secondary' }}>
+                <ArrowDownwardOutlined fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          </>
+        )}
         <Tooltip title="Duplicate" placement="left-start">
           <IconButton onClick={handleDuplicateClick} sx={{ color: 'text.secondary' }}>
             <ContentCopyOutlined fontSize="small" />

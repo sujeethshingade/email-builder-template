@@ -1,12 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 
-import {
-  SpaceBarOutlined,
-  VerticalAlignBottomOutlined,
-  VerticalAlignCenterOutlined,
-  VerticalAlignTopOutlined,
-} from '@mui/icons-material';
+import { SpaceBarOutlined } from '@mui/icons-material';
 import { ToggleButton } from '@mui/material';
 
 import ColumnsContainerPropsSchema, {
@@ -66,23 +61,6 @@ export default function ColumnsContainerPanel({ data, setData }: ColumnsContaine
         defaultValue={data.props?.columnsGap ?? 0}
         onChange={(columnsGap) => updateData({ ...data, props: { ...data.props, columnsGap } })}
       />
-      <RadioGroupInput
-        label="Position"
-        defaultValue={data.props?.contentAlignment ?? 'middle'}
-        onChange={(contentAlignment) => {
-          updateData({ ...data, props: { ...data.props, contentAlignment } });
-        }}
-      >
-        <ToggleButton value="top">
-          <VerticalAlignTopOutlined fontSize="small" />
-        </ToggleButton>
-        <ToggleButton value="middle">
-          <VerticalAlignCenterOutlined fontSize="small" />
-        </ToggleButton>
-        <ToggleButton value="bottom">
-          <VerticalAlignBottomOutlined fontSize="small" />
-        </ToggleButton>
-      </RadioGroupInput>
 
       <MultiStylePropertyPanel
         names={['backgroundColor', 'padding']}

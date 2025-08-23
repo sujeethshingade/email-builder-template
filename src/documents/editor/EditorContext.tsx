@@ -14,16 +14,15 @@ type TValue = {
   selectedSidebarTab: 'block-configuration' | 'styles';
   selectedMainTab: 'editor' | 'preview' | 'html';
   selectedScreenSize: 'desktop' | 'mobile';
+  currentTemplate: string;
 
   inspectorDrawerOpen: boolean;
   samplesDrawerOpen: boolean;
   isInitialized: boolean;
-  
-  // Add document metadata to store editing state
-  documentMeta: {
-    selectedTab?: string;
-    savedTabBeforeEditing?: string;
-  };
+
+  history: TEditorConfiguration[];
+  historyIndex: number;
+  maxHistorySize: number;
 };
 
 const editorStateStore = create<TValue>(() => ({
@@ -32,26 +31,58 @@ const editorStateStore = create<TValue>(() => ({
   selectedSidebarTab: 'styles',
   selectedMainTab: 'editor',
   selectedScreenSize: 'desktop',
+  currentTemplate: '',
 
   inspectorDrawerOpen: true,
   samplesDrawerOpen: true,
   isInitialized: false,
-  
-  // Initialize document metadata
-  documentMeta: {}
+
+  history: [],
+  historyIndex: -1,
+  maxHistorySize: 100,
 }));
 
 // Custom hook to initialize the document on the client side
 export function useEditorInitialization() {
   useEffect(() => {
     if (!editorStateStore.getState().isInitialized) {
-      const document = getConfiguration(window.location.hash);
+      const currentTemplate = window.location.hash;
+      const document = getConfiguration(currentTemplate);
       editorStateStore.setState({ 
         document,
-        isInitialized: true 
+        currentTemplate,
+        isInitialized: true,
+        history: [document],
+        historyIndex: 0,
       });
     }
+
+    const handleHashChange = () => {
+      const newTemplate = window.location.hash;
+      const currentState = editorStateStore.getState();
+      if (currentState.currentTemplate !== newTemplate) {
+        const document = getConfiguration(newTemplate);
+        editorStateStore.setState({
+          document,
+          currentTemplate: newTemplate,
+          selectedSidebarTab: 'styles',
+          selectedBlockId: null,
+          history: [document],
+          historyIndex: 0,
+        });
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
   }, []);
+}
+
+export function useCurrentTemplate() {
+  return editorStateStore((s) => s.currentTemplate);
 }
 
 export function useDocument() {
@@ -94,6 +125,14 @@ export function useSamplesDrawerOpen() {
   return editorStateStore((s) => s.samplesDrawerOpen);
 }
 
+export function useCanUndo() {
+  return editorStateStore((s) => s.historyIndex > 0);
+}
+
+export function useCanRedo() {
+  return editorStateStore((s) => s.historyIndex < s.history.length - 1);
+}
+
 export function setSelectedBlockId(selectedBlockId: TValue['selectedBlockId']) {
   const currentState = editorStateStore.getState();
   
@@ -118,27 +157,100 @@ export function setSidebarTab(selectedSidebarTab: TValue['selectedSidebarTab']) 
   return editorStateStore.setState({ selectedSidebarTab });
 }
 
-export function resetDocument(document: TValue['document']) {
-  const currentState = editorStateStore.getState();
-  
+export function resetDocument(document: TValue['document'], templateHref?: string) {
+  const currentTemplate = templateHref || window.location.hash;
   return editorStateStore.setState({
     document,
+    currentTemplate,
+    selectedSidebarTab: 'styles',
     selectedBlockId: null,
-    selectedSidebarTab: currentState.selectedSidebarTab
+    history: [document],
+    historyIndex: 0,
   });
 }
 
 export function setDocument(document: TValue['document']) {
   const currentState = editorStateStore.getState();
   const originalDocument = currentState.document;
-  
-  // Keep the current sidebar tab when updating document
+  const newDocument = {
+    ...originalDocument,
+    ...document,
+  };
+
+  if (JSON.stringify(newDocument) === JSON.stringify(originalDocument)) {
+    return;
+  }
+
+  const newHistory = currentState.history.slice(0, currentState.historyIndex + 1);
+  newHistory.push(newDocument);
+
+  if (newHistory.length > currentState.maxHistorySize) {
+    newHistory.shift();
+  } else {
+    return editorStateStore.setState({
+      document: newDocument,
+      history: newHistory,
+      historyIndex: newHistory.length - 1,
+    });
+  }
+
   return editorStateStore.setState({
-    document: {
-      ...originalDocument,
-      ...document,
-    },
-    selectedSidebarTab: currentState.selectedSidebarTab
+    document: newDocument,
+    history: newHistory,
+    historyIndex: newHistory.length - 1,
+  });
+}
+
+export function undo() {
+  const currentState = editorStateStore.getState();
+  if (currentState.historyIndex > 0) {
+    const newIndex = currentState.historyIndex - 1;
+    const previousDocument = currentState.history[newIndex];
+    editorStateStore.setState({
+      document: previousDocument,
+      historyIndex: newIndex,
+      selectedBlockId: null, 
+    });
+  }
+}
+
+export function redo() {
+  const currentState = editorStateStore.getState();
+  if (currentState.historyIndex < currentState.history.length - 1) {
+    const newIndex = currentState.historyIndex + 1;
+    const nextDocument = currentState.history[newIndex];
+    editorStateStore.setState({
+      document: nextDocument,
+      historyIndex: newIndex,
+      selectedBlockId: null,
+    });
+  }
+}
+
+export function setDocumentWithHistory(newDocument: TValue['document']) {
+  const currentState = editorStateStore.getState();
+
+  if (JSON.stringify(newDocument) === JSON.stringify(currentState.document)) {
+    return;
+  }
+
+  const newHistory = currentState.history.slice(0, currentState.historyIndex + 1);
+  newHistory.push(newDocument);
+
+  if (newHistory.length > currentState.maxHistorySize) {
+    newHistory.shift();
+  } else {
+    return editorStateStore.setState({
+      document: newDocument,
+      history: newHistory,
+      historyIndex: newHistory.length - 1,
+    });
+  }
+
+  return editorStateStore.setState({
+    document: newDocument,
+    history: newHistory,
+    historyIndex: newHistory.length - 1,
   });
 }
 
