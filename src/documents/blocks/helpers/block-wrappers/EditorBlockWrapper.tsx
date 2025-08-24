@@ -667,8 +667,12 @@ export default function EditorBlockWrapper({ children }: TEditorBlockWrapperProp
       onDoubleClick={handleDoubleClick}
     >
       {renderMenu()}
-      {isTextOrHeading && isEditing && (
-        <FloatingFormatMenu editableRef={editableRef as unknown as React.RefObject<HTMLElement>} isEditing={isEditing} />
+      {isTextBlock && isEditing && (
+        <FloatingFormatMenu 
+          editableRef={editableRef as unknown as React.RefObject<HTMLElement>} 
+          isEditing={isEditing} 
+          blockType={block?.type}
+        />
       )}
       {renderChildren()}
     </Box>

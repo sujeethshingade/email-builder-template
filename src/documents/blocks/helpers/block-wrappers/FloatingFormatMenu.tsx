@@ -7,18 +7,19 @@ import { FormatBold, FormatItalic, FormatUnderlined } from '@mui/icons-material'
 type Props = {
   editableRef: React.RefObject<HTMLElement>;
   isEditing: boolean;
+  blockType?: string; 
 };
 
 type Pos = { top: number; left: number } | null;
 
-export default function FloatingFormatMenu({ editableRef, isEditing }: Props) {
+export default function FloatingFormatMenu({ editableRef, isEditing, blockType }: Props) {
   const [pos, setPos] = useState<Pos>(null);
   const [visible, setVisible] = useState(false);
 
   const isMac = useMemo(() => typeof navigator !== 'undefined' && /Mac|iPhone|iPad|iPod/.test(navigator.platform), []);
 
   const computePosition = () => {
-    if (!isEditing || !editableRef.current) {
+    if (!isEditing || !editableRef.current || blockType !== 'Text') {
       setVisible(false);
       setPos(null);
       return;
