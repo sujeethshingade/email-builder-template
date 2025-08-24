@@ -25,7 +25,8 @@ export default function EditorBlockWrapper({ children }: TEditorBlockWrapperProp
   
   const selectionInfoRef = useRef<{
     node: Node | null;
-    offset: number;
+    offset: number; 
+    absoluteOffset: number; 
     text: string;
   } | null>(null);
 
@@ -47,6 +48,8 @@ export default function EditorBlockWrapper({ children }: TEditorBlockWrapperProp
 
   const block = document[blockId];
   const isTextOrHeading = block?.type === 'Text' || block?.type === 'Heading';
+  const isTextBlock = block?.type === 'Text';
+  const isHeadingBlock = block?.type === 'Heading';
 
   const getHeadingFontSize = () => {
     if (block?.type !== 'Heading') return '16px';
@@ -61,67 +64,97 @@ export default function EditorBlockWrapper({ children }: TEditorBlockWrapperProp
     }
   };
 
+  const getAbsoluteOffset = (range: Range, root: HTMLElement): number => {
+    try {
+      const walker = window.document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+      let abs = 0;
+      let node: Node | null;
+      while ((node = walker.nextNode())) {
+        if (node === range.endContainer) {
+          return abs + range.endOffset;
+        }
+        abs += node.textContent?.length || 0;
+      }
+      return abs;
+    } catch {
+      return 0;
+    }
+  };
+
   const saveSelection = () => {
     if (!editableRef.current || !isEditing) return;
-    
     const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0) return;
-    
     const range = selection.getRangeAt(0);
-    if (editableRef.current.contains(range.commonAncestorContainer)) {
-      selectionInfoRef.current = {
-        node: range.endContainer,
-        offset: range.endOffset,
-        text: editableRef.current.textContent || ''
-      };
-    }
+    if (!editableRef.current.contains(range.commonAncestorContainer)) return;
+
+    const absoluteOffset = getAbsoluteOffset(range, editableRef.current);
+    selectionInfoRef.current = {
+      node: range.endContainer,
+      offset: range.endOffset,
+      absoluteOffset,
+      text: editableRef.current.textContent || '',
+    };
   };
 
   const restoreSelection = () => {
     if (!editableRef.current || !selectionInfoRef.current || !isEditing) return;
-    
     try {
       const selection = window.getSelection();
+      if (!selection) return;
+      
       const range = window.document.createRange();
-      
       editableRef.current.focus();
+
+      const targetOffset = Math.max(0, selectionInfoRef.current.absoluteOffset || 0);
+      const walker = window.document.createTreeWalker(
+        editableRef.current,
+        NodeFilter.SHOW_TEXT,
+        null
+      );
       
-      const node = selectionInfoRef.current.node;
-      const nodeInDocument = editableRef.current.contains(node);
+      let currentOffset = 0;
+      let targetNode: Node | null = null;
+      let targetNodeOffset = 0;
+      let textNode: Node | null;
       
-      if (node && nodeInDocument) {
-        const offset = Math.min(
-          selectionInfoRef.current.offset,
-          node.textContent?.length || 0
-        );
-        
-        range.setStart(node, offset);
-        range.setEnd(node, offset);
-      } else {
-        const textNodes = [];
-        const walker = window.document.createTreeWalker(
+      while ((textNode = walker.nextNode())) {
+        const nodeLength = textNode.textContent?.length || 0;
+        if (currentOffset + nodeLength >= targetOffset) {
+          targetNode = textNode;
+          targetNodeOffset = targetOffset - currentOffset;
+          break;
+        }
+        currentOffset += nodeLength;
+      }
+      
+      if (!targetNode) {
+        const endWalker = window.document.createTreeWalker(
           editableRef.current,
           NodeFilter.SHOW_TEXT,
           null
         );
+        let last: Node | null = null;
+        let n: Node | null;
+        while ((n = endWalker.nextNode())) last = n;
         
-        let textNode;
-        while (textNode = walker.nextNode()) {
-          textNodes.push(textNode);
-        }
-        
-        if (textNodes.length > 0) {
-          const lastTextNode = textNodes[textNodes.length - 1];
-          range.setStart(lastTextNode, lastTextNode.textContent?.length || 0);
-          range.setEnd(lastTextNode, lastTextNode.textContent?.length || 0);
+        if (last) {
+          const len = last.textContent?.length || 0;
+          range.setStart(last, len);
+          range.setEnd(last, len);
         } else {
           range.selectNodeContents(editableRef.current);
           range.collapse(false);
         }
+      } else {
+        const len = targetNode.textContent?.length || 0;
+        const clamped = Math.max(0, Math.min(len, targetNodeOffset));
+        range.setStart(targetNode, clamped);
+        range.setEnd(targetNode, clamped);
       }
       
-      selection?.removeAllRanges();
-      selection?.addRange(range);
+      selection.removeAllRanges();
+      selection.addRange(range);
     } catch (error) {
       console.warn('Failed to restore selection:', error);
     }
@@ -179,6 +212,46 @@ export default function EditorBlockWrapper({ children }: TEditorBlockWrapperProp
       }
     }
     
+    if (isEditing && e.key === 'Enter') {
+      if (isHeadingBlock) {
+        e.preventDefault();
+        return;
+      }
+      
+      if (isTextBlock) {
+        e.preventDefault();
+        
+        const selection = window.getSelection();
+        if (selection && selection.rangeCount > 0 && editableRef.current) {
+          const range = selection.getRangeAt(0);
+          
+          const textNode = window.document.createTextNode('\n');
+          range.deleteContents();
+          range.insertNode(textNode);
+          range.setStartAfter(textNode);
+          range.setEndAfter(textNode);
+          selection.removeAllRanges();
+          selection.addRange(range);
+          
+          if (editableRef.current) {
+            const newAbsOffset = getAbsoluteOffset(range, editableRef.current);
+            selectionInfoRef.current = {
+              node: range.endContainer,
+              offset: range.endOffset,
+              absoluteOffset: newAbsOffset,
+              text: editableRef.current.textContent || ''
+            };
+          }
+          
+          const event = new Event('input', { bubbles: true });
+          editableRef.current.dispatchEvent(event);
+          
+          forceInspectTab();
+        }
+        return;
+      }
+    }
+    
     if (isEditing) {
       saveSelection();
       forceInspectTab();
@@ -212,11 +285,11 @@ export default function EditorBlockWrapper({ children }: TEditorBlockWrapperProp
         [blockId]: updatedBlock
       });
       
-      window.requestAnimationFrame(() => {
-        if (isEditing) {
+      setTimeout(() => {
+        if (isEditing && selectionInfoRef.current) {
           restoreSelection();
         }
-      });
+      }, 0);
     }
   };
 
@@ -250,7 +323,7 @@ export default function EditorBlockWrapper({ children }: TEditorBlockWrapperProp
       setIsEditing(false);
       isEditingSession.current = false;
       forcedTabRef.current = false;
-      selectionInfoRef.current = null; // Reset selection info
+      selectionInfoRef.current = null; 
       
       const updatedBlock = {
         ...block,
@@ -300,6 +373,7 @@ export default function EditorBlockWrapper({ children }: TEditorBlockWrapperProp
           selectionInfoRef.current = {
             node: lastTextNode,
             offset: lastTextNode.textContent?.length || 0,
+            absoluteOffset: (editableElement.textContent || '').length,
             text: editableElement.textContent || ''
           };
         } else {
