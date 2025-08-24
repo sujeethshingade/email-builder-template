@@ -205,6 +205,163 @@ export default function EditorBlockWrapper({ children }: TEditorBlockWrapperProp
     }
   };
 
+  // Convert clipboard HTML to Markdown 
+  const htmlToMarkdown = (html: string): string => {
+    html = html.replace(/\u00A0/g, ' ');
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+
+    const isBoldEl = (el: Element) => {
+      const tag = el.tagName;
+      if (tag === 'B' || tag === 'STRONG') return true;
+      const fw = (el as HTMLElement).style?.fontWeight || '';
+      if (!fw) return false;
+      if (fw === 'bold') return true;
+      const num = parseInt(fw, 10);
+      return !Number.isNaN(num) && num >= 600;
+    };
+    const isItalicEl = (el: Element) => {
+      const tag = el.tagName;
+      if (tag === 'I' || tag === 'EM') return true;
+      const fs = (el as HTMLElement).style?.fontStyle || '';
+      return fs === 'italic' || fs === 'oblique';
+    };
+
+    const blockLike = new Set(['P', 'DIV', 'SECTION', 'ARTICLE', 'HEADER', 'FOOTER', 'ASIDE', 'MAIN']);
+    const lineBreakLike = new Set(['BR']);
+    const listLike = new Set(['UL', 'OL']);
+    const listItem = 'LI';
+
+    const walk = (node: Node): string => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        return (node.textContent || '').replace(/\s+/g, (m) => (m.includes('\n') ? '\n' : ' '));
+      }
+
+      if (node.nodeType !== Node.ELEMENT_NODE) return '';
+
+      const el = node as Element;
+      const tag = el.tagName;
+
+      if (lineBreakLike.has(tag)) return '\n';
+
+      if (tag === 'CODE') {
+        const inner = Array.from(el.childNodes).map(walk).join('');
+        const escaped = inner.replace(/`/g, '\\`');
+        return '`' + escaped + '`';
+      }
+
+      if (tag === 'A') {
+        const href = el.getAttribute('href') || '';
+        const inner = Array.from(el.childNodes).map(walk).join('');
+        if (!href) return inner;
+        return `[${inner}](${href})`;
+      }
+
+      if (listLike.has(tag)) {
+        const isOl = tag === 'OL';
+        const items = Array.from(el.children)
+          .filter((c) => c.tagName === listItem)
+          .map((li, idx) => {
+            const content = Array.from(li.childNodes).map(walk).join('').trim();
+            return (isOl ? `${idx + 1}. ` : `- `) + content;
+          })
+          .join('\n');
+        return items + '\n';
+      }
+
+      let content = Array.from(el.childNodes).map(walk).join('');
+
+      const bold = isBoldEl(el);
+      const italic = isItalicEl(el);
+
+      if (bold && italic) {
+        content = `***${content}***`;
+      } else if (bold) {
+        content = `**${content}**`;
+      } else if (italic) {
+        content = `*${content}*`;
+      }
+
+      if (blockLike.has(tag)) {
+        content = content.replace(/\n+$/g, '');
+        return content + '\n';
+      }
+
+      return content;
+    };
+
+    let md = Array.from(doc.body.childNodes).map(walk).join('');
+
+    md = md.replace(/\n{3,}/g, '\n\n');
+
+    return md.trimEnd();
+  };
+
+  const insertTextAtSelection = (text: string) => {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0 || !editableRef.current) return;
+
+    const range = selection.getRangeAt(0);
+    if (!editableRef.current.contains(range.commonAncestorContainer)) return;
+
+    range.deleteContents();
+
+    const textNode = window.document.createTextNode(text);
+    range.insertNode(textNode);
+    range.setStart(textNode, textNode.nodeValue?.length || 0);
+    range.setEnd(textNode, textNode.nodeValue?.length || 0);
+
+    selection.removeAllRanges();
+    selection.addRange(range);
+
+    const newAbsOffset = getAbsoluteOffset(range, editableRef.current);
+    selectionInfoRef.current = {
+      node: range.endContainer,
+      offset: range.endOffset,
+      absoluteOffset: newAbsOffset,
+      text: editableRef.current.textContent || ''
+    };
+
+    const event = new Event('input', { bubbles: true });
+    editableRef.current.dispatchEvent(event);
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
+    if (!isEditing || !editableRef.current) return;
+
+    if (!isTextBlock) {
+      if (isHeadingBlock) {
+        e.preventDefault();
+        const txt = e.clipboardData.getData('text/plain');
+        insertTextAtSelection(txt);
+      }
+      return;
+    }
+
+    e.preventDefault();
+
+    const html = e.clipboardData.getData('text/html');
+    const plain = e.clipboardData.getData('text/plain');
+
+    let toInsert = '';
+
+    if (html) {
+      try {
+        toInsert = htmlToMarkdown(html);
+      } catch {
+        toInsert = plain || '';
+      }
+    } else {
+      toInsert = plain || '';
+    }
+
+    toInsert = toInsert.replace(/\r\n?/g, '\n');
+
+    insertTextAtSelection(toInsert);
+    forceInspectTab();
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (isEditing && e.key === 'Escape') {
       if (editableRef.current) {
@@ -409,6 +566,7 @@ export default function EditorBlockWrapper({ children }: TEditorBlockWrapperProp
           onSelect={saveSelection}
           onKeyUp={saveSelection}
           onMouseUp={handleMouseUp}
+          onPaste={handlePaste}
           data-editing="true"
           style={{
             cursor: 'text',
