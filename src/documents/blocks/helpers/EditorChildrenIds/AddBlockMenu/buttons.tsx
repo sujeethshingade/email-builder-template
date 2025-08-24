@@ -40,7 +40,7 @@ export const BUTTONS: TButtonProps[] = [
     block: () => ({
       type: 'Text',
       data: {
-        props: { text: 'Text block' },
+  props: { text: 'Text block', markdown: true },
         style: {
           padding: { top: 16, bottom: 16, left: 24, right: 24 },
           fontWeight: 'normal',

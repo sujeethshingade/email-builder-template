@@ -29,7 +29,7 @@ export default function Text({ style, props }: TextProps) {
 
   const text = props?.text || '';
 
-  if (props?.markdown) {
+  if (props?.markdown ?? true) {
     return (
       <div style={textStyle}>
         {renderMarkdown(text)}
