@@ -1,12 +1,10 @@
 import React, { CSSProperties, useState, useRef, useEffect } from 'react';
-
 import { Box } from '@mui/material';
-
 import { useCurrentBlockId } from '../../../editor/EditorBlock';
 import { setSelectedBlockId, useSelectedBlockId, useDocument, setDocument, useSelectedSidebarTab, setSidebarTab } from '../../../editor/EditorContext';
 import { getFontFamily } from '../fontFamilyUtils';
-
 import TuneMenu from './TuneMenu';
+import FloatingFormatMenu from './FloatingFormatMenu';
 
 type TEditorBlockWrapperProps = {
   children: JSX.Element;
@@ -155,6 +153,26 @@ export default function EditorBlockWrapper({ children }: TEditorBlockWrapperProp
       
       selection.removeAllRanges();
       selection.addRange(range);
+
+      try {
+        if (selection.rangeCount > 0 && editableRef.current) {
+          const r = selection.getRangeAt(0);
+          if (r.collapsed && editableRef.current.contains(r.commonAncestorContainer)) {
+            const content = editableRef.current.textContent || '';
+            const abs = getAbsoluteOffset(r, editableRef.current);
+            if (abs === content.length && content.endsWith('\n')) {
+              const zwsp = window.document.createTextNode('\u200B');
+              r.insertNode(zwsp);
+              r.setStart(zwsp, zwsp.nodeValue?.length || 0);
+              r.setEnd(zwsp, zwsp.nodeValue?.length || 0);
+              selection.removeAllRanges();
+              selection.addRange(r);
+            }
+          }
+        }
+      } catch (e) {
+        // noop
+      }
     } catch (error) {
       console.warn('Failed to restore selection:', error);
     }
@@ -382,16 +400,21 @@ export default function EditorBlockWrapper({ children }: TEditorBlockWrapperProp
         if (selection && selection.rangeCount > 0 && editableRef.current) {
           const range = selection.getRangeAt(0);
           
-          const textNode = window.document.createTextNode('\n');
+          const newlineNode = window.document.createTextNode('\n');
+          const zwspNode = window.document.createTextNode('\u200B');
           range.deleteContents();
-          range.insertNode(textNode);
-          range.setStartAfter(textNode);
-          range.setEndAfter(textNode);
+          range.insertNode(newlineNode);
+          range.collapse(false);
+          range.insertNode(zwspNode);
+          const zwspLen = zwspNode.nodeValue?.length || 0;
+          range.setStart(zwspNode, zwspLen);
+          range.setEnd(zwspNode, zwspLen);
           selection.removeAllRanges();
           selection.addRange(range);
           
           if (editableRef.current) {
-            const newAbsOffset = getAbsoluteOffset(range, editableRef.current);
+            const absWithZwsp = getAbsoluteOffset(range, editableRef.current);
+            const newAbsOffset = Math.max(0, absWithZwsp - 1);
             selectionInfoRef.current = {
               node: range.endContainer,
               offset: range.endOffset,
@@ -422,7 +445,7 @@ export default function EditorBlockWrapper({ children }: TEditorBlockWrapperProp
       forceInspectTab();
       
       const target = e.target as HTMLDivElement;
-      const newText = target.textContent || target.innerText || '';
+      let newText = (target.innerText || target.textContent || '').replace(/\u200B/g, '').replace(/\r\n?/g, '\n');
       
       if (newText === block?.data?.props?.text) return;
       
@@ -475,7 +498,7 @@ export default function EditorBlockWrapper({ children }: TEditorBlockWrapperProp
     }
     
     if (isEditing && editableRef.current && isTextOrHeading) {
-      const newText = editableRef.current.textContent || editableRef.current.innerText || '';
+      const newText = (editableRef.current.innerText || editableRef.current.textContent || '').replace(/\u200B/g, '').replace(/\r\n?/g, '\n');
       
       setIsEditing(false);
       isEditingSession.current = false;
@@ -623,6 +646,7 @@ export default function EditorBlockWrapper({ children }: TEditorBlockWrapperProp
         outlineOffset: '-1px',
         outline,
       }}
+  data-editor-block-wrapper="true"
       onMouseEnter={(ev) => {
         setMouseInside(true);
         ev.stopPropagation();
@@ -643,6 +667,9 @@ export default function EditorBlockWrapper({ children }: TEditorBlockWrapperProp
       onDoubleClick={handleDoubleClick}
     >
       {renderMenu()}
+      {isTextOrHeading && isEditing && (
+        <FloatingFormatMenu editableRef={editableRef as unknown as React.RefObject<HTMLElement>} isEditing={isEditing} />
+      )}
       {renderChildren()}
     </Box>
   );
