@@ -140,7 +140,7 @@ const BASIC_B4: TEditorConfiguration = {
         textAlign: 'left',
         padding: {
           top: 4,
-          bottom: 4,
+          bottom: 20,
           right: 24,
           left: 24,
         },

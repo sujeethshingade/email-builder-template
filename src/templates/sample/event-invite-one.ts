@@ -81,7 +81,7 @@ const EVENT_INVITE_ONE: TEditorConfiguration = {
         },
       },
       props: {
-        text: 'Arowwai Industries',
+        text: 'Formidium',
       },
     },
   },
@@ -727,7 +727,7 @@ const EVENT_INVITE_ONE: TEditorConfiguration = {
         },
       },
       props: {
-        text: '123-456-7890\nreallygreatsite.com\n123 Anywhere St., Any City',
+        text: '123-456-7890\ninfo@formidium.com | www.formidium.com\n123 Anywhere St., Any City',
         markdown: true,
       },
     },

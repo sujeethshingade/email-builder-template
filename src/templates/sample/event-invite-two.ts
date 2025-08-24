@@ -736,7 +736,7 @@ const EVENT_INVITE_TWO: TEditorConfiguration = {
         },
       },
       props: {
-        text: 'www.reallygreatsite.com\nMore info: hello@reallygreatsite.com | +123-456-7890',
+        text: 'www.formidium.com\nMore info: info@formidium.com | +123-456-7890',
         markdown: true,
       },
     },

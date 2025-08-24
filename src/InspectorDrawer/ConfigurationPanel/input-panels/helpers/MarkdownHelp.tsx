@@ -32,6 +32,9 @@ export default function MarkdownHelp() {
           <em>*Italic text*</em> → <em>Italic text</em>
         </Typography>
         <Typography variant="body2" component="div" sx={{ mb: 1 }}>
+          <span>&lt;u&gt;Underline&lt;/u&gt;</span> → <u>Underline</u>
+        </Typography>
+        <Typography variant="body2" component="div" sx={{ mb: 1 }}>
           <code>`Inline code`</code> → <code>Inline code</code>
         </Typography>
       </Box>
