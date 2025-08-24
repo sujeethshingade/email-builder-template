@@ -90,11 +90,11 @@ export function useDocument() {
 }
 
 export function useDocumentMeta() {
-  return editorStateStore((s) => s.documentMeta);
+  return editorStateStore((s) => s.document);
 }
 
-export function setDocumentMeta(documentMeta: TValue['documentMeta']) {
-  return editorStateStore.setState({ documentMeta });
+export function setDocumentMeta(documentMeta: TValue['document']) {
+  return editorStateStore.setState({ document: documentMeta });
 }
 
 export function useSelectedBlockId() {
