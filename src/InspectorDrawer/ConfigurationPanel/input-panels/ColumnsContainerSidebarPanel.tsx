@@ -10,9 +10,11 @@ import ColumnsContainerPropsSchema, {
 
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
 import ColumnWidthsInput from './helpers/inputs/ColumnWidthsInput';
+import ColumnLayoutSelector from './helpers/inputs/ColumnLayoutSelector';
 import RadioGroupInput from './helpers/inputs/RadioGroupInput';
 import SliderInput from './helpers/inputs/SliderInput';
 import MultiStylePropertyPanel from './helpers/style-inputs/MultiStylePropertyPanel';
+import { applyColumnLayoutTemplate, ColumnLayoutTemplate } from '../../../documents/blocks/ColumnsContainer/ColumnLayoutTemplates';
 import Zod from 'zod';
 
 type ColumnsContainerPanelProps = {
@@ -29,6 +31,11 @@ export default function ColumnsContainerPanel({ data, setData }: ColumnsContaine
     } else {
       setErrors(res.error);
     }
+  };
+
+  const handleTemplateSelect = (template: ColumnLayoutTemplate) => {
+    const newData = applyColumnLayoutTemplate(data, template);
+    updateData(newData);
   };
 
   return (
@@ -61,6 +68,8 @@ export default function ColumnsContainerPanel({ data, setData }: ColumnsContaine
         defaultValue={data.props?.columnsGap ?? 0}
         onChange={(columnsGap) => updateData({ ...data, props: { ...data.props, columnsGap } })}
       />
+
+      <ColumnLayoutSelector onTemplateSelect={handleTemplateSelect} />
 
       <MultiStylePropertyPanel
         names={['backgroundColor', 'padding']}

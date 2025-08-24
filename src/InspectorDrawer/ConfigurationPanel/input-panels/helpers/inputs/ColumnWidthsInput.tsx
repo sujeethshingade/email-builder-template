@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Stack } from '@mui/material';
 
@@ -27,6 +27,12 @@ export default function ColumnWidthsInput({ columnsCount, defaultValue, onChange
     return [null, null, null];
   });
 
+  useEffect(() => {
+    if (defaultValue) {
+      setCurrentValue(defaultValue);
+    }
+  }, [defaultValue]);
+
   const setIndexValue = (index: 0 | 1 | 2, value: number | null | undefined) => {
     const nValue: FixedWidths = [...currentValue];
     nValue[index] = value;
@@ -40,6 +46,7 @@ export default function ColumnWidthsInput({ columnsCount, defaultValue, onChange
       <TextDimensionInput
         label="Column 3"
         defaultValue={currentValue?.[2]}
+        key={`col3-${currentValue?.[2]}`}
         onChange={(v) => {
           setIndexValue(2, v);
         }}
@@ -51,6 +58,7 @@ export default function ColumnWidthsInput({ columnsCount, defaultValue, onChange
       <TextDimensionInput
         label="Column 1"
         defaultValue={currentValue?.[0]}
+        key={`col1-${currentValue?.[0]}`}
         onChange={(v) => {
           setIndexValue(0, v);
         }}
@@ -58,6 +66,7 @@ export default function ColumnWidthsInput({ columnsCount, defaultValue, onChange
       <TextDimensionInput
         label="Column 2"
         defaultValue={currentValue?.[1]}
+        key={`col2-${currentValue?.[1]}`}
         onChange={(v) => {
           setIndexValue(1, v);
         }}

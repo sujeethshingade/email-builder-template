@@ -305,7 +305,7 @@ const EVENT_INVITE_TWO: TEditorConfiguration = {
         },
       },
       props: {
-        text: '• Wardoro Hotel 123 Anywhere St., Any City\n• Live stream at www.reallygreatsite.com\n• +123 456 7890',
+        text: '• Wardoro Hotel 123 Anywhere St., Any City\n• Live stream at www.formidium.com\n• +123 456 7890',
         markdown: true,
       },
     },
