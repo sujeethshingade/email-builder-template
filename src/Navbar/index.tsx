@@ -3,6 +3,7 @@
 import { MonitorOutlined, PhoneIphoneOutlined } from '@mui/icons-material';
 import { Box, Stack, SxProps, ToggleButton, ToggleButtonGroup, Tooltip, Typography } from '@mui/material';
 import { Reader } from '@usewaypoint/email-builder';
+import { transformForReader } from '@/documents/reader/transform';
 
 import EditorBlock from '../documents/editor/EditorBlock';
 import {
@@ -60,7 +61,7 @@ export default function Navbar() {
       case 'preview':
         return (
           <Box sx={mainBoxSx}>
-            <Reader document={document} rootBlockId="root" />
+            <Reader document={transformForReader(document) as any} rootBlockId="root" />
           </Box>
         );
       case 'html':

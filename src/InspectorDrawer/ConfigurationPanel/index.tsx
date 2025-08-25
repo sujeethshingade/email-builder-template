@@ -16,6 +16,8 @@ import HtmlSidebarPanel from './input-panels/HtmlSidebarPanel';
 import ImageSidebarPanel from './input-panels/ImageSidebarPanel';
 import SpacerSidebarPanel from './input-panels/SpacerSidebarPanel';
 import TextSidebarPanel from './input-panels/TextSidebarPanel';
+import SocialSidebarPanel from './input-panels/SocialSidebarPanel';
+import SignatureSidebarPanel from './input-panels/SignatureSidebarPanel';
 
 function renderMessage(val: string) {
   return (
@@ -58,6 +60,10 @@ export default function ConfigurationPanel() {
       return <HtmlSidebarPanel key={selectedBlockId} data={data} setData={(data) => setBlock({ type, data })} />;
     case 'Image':
       return <ImageSidebarPanel key={selectedBlockId} data={data} setData={(data) => setBlock({ type, data })} />;
+    case 'Social':
+      return <SocialSidebarPanel key={selectedBlockId} data={data} setData={(data) => setBlock({ type, data })} />;
+    case 'Signature':
+      return <SignatureSidebarPanel key={selectedBlockId} data={data} setData={(data) => setBlock({ type, data })} />;
     case 'EmailLayout':
       return <EmailLayoutSidebarPanel key={selectedBlockId} data={data} setData={(data) => setBlock({ type, data })} />;
     case 'Spacer':

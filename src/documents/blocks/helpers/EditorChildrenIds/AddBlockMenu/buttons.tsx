@@ -7,10 +7,12 @@ import {
   HorizontalRuleOutlined,
   HtmlOutlined,
   ImageOutlined,
+  Groups2Outlined,
   LibraryAddOutlined,
   NotesOutlined,
   SmartButtonOutlined,
   ViewColumnOutlined,
+  DrawOutlined,
 } from '@mui/icons-material';
 
 import { TEditorBlock } from '../../../../editor/core';
@@ -150,6 +152,52 @@ export const BUTTONS: TButtonProps[] = [
     block: () => ({
       type: 'Container',
       data: {
+        style: { padding: { top: 16, bottom: 16, left: 24, right: 24 } },
+      },
+    }),
+  },
+  {
+    label: 'Social',
+  icon: <Groups2Outlined />,
+    block: () => ({
+      type: 'Social',
+      data: {
+        props: {
+          links: [
+            { platform: 'LinkedIn', url: '' },
+            { platform: 'X', url: '' },
+            { platform: 'Instagram', url: '' },
+            { platform: 'Website', url: '' },
+          ],
+        },
+        style: { 
+          padding: { top: 16, bottom: 16, left: 24, right: 24 },
+          textAlign: 'center',
+         },
+      },
+    }),
+  },
+  {
+    label: 'Signature',
+  icon: <DrawOutlined />,
+    block: () => ({
+      type: 'Signature',
+      data: {
+        props: {
+          variant: 'classic',
+          fullName: 'Your Name',
+          title: 'Role',
+          department: '',
+          company: 'Company',
+          email: 'you@company.com',
+          phone: '',
+          website: '',
+          socialLinks: [
+            { platform: 'LinkedIn', url: '' },
+            { platform: 'X', url: '' },
+            { platform: 'Instagram', url: '' },
+          ],
+        },
         style: { padding: { top: 16, bottom: 16, left: 24, right: 24 } },
       },
     }),

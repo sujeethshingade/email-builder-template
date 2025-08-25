@@ -24,6 +24,10 @@ import EmailLayoutPropsSchema from '../blocks/EmailLayout/EmailLayoutPropsSchema
 import Heading from '../blocks/Heading/Heading';
 import Text from '../blocks/Text/Text';
 import EditorBlockWrapper from '../blocks/helpers/block-wrappers/EditorBlockWrapper';
+import SocialEditor from '@/documents/blocks/Social/SocialEditor';
+import SocialPropsSchema from '@/documents/blocks/Social/SocialPropsSchema';
+import SignatureEditor from '@/documents/blocks/Signature/SignatureEditor';
+import SignaturePropsSchema from '@/documents/blocks/Signature/SignaturePropsSchema';
 
 const EDITOR_DICTIONARY = buildBlockConfigurationDictionary({
   Avatar: {
@@ -116,6 +120,22 @@ const EDITOR_DICTIONARY = buildBlockConfigurationDictionary({
     Component: (props) => (
       <EditorBlockWrapper>
         <Divider {...props} />
+      </EditorBlockWrapper>
+    ),
+  },
+  Social: {
+    schema: SocialPropsSchema,
+    Component: (props) => (
+      <EditorBlockWrapper>
+        <SocialEditor {...props} />
+      </EditorBlockWrapper>
+    ),
+  },
+  Signature: {
+    schema: SignaturePropsSchema,
+    Component: (props) => (
+      <EditorBlockWrapper>
+        <SignatureEditor {...props} />
       </EditorBlockWrapper>
     ),
   },
