@@ -11,7 +11,6 @@ const BASIC_B2: TEditorConfiguration = {
       childrenIds: [
         'block-header',
         'block-logo',
-        'block-greeting',
         'block-main-content',
         'block-button',
         'block-image-container',
@@ -62,7 +61,7 @@ const BASIC_B2: TEditorConfiguration = {
       },
     },
   },
-  'block-greeting': {
+  'block-main-content': {
     type: 'Text',
     data: {
       style: {
@@ -73,36 +72,15 @@ const BASIC_B2: TEditorConfiguration = {
         fontWeight: 'normal',
         textAlign: 'left',
         padding: {
-          top: 24,
-          bottom: 16,
+          top:24,
+          bottom: 24,
           right: 24,
           left: 24,
         },
       },
       props: {
-        text: 'Hi {{firstName}},',
-      },
-    },
-  },
-  'block-main-content': {
-    type: 'Text',
-    data: {
-      style: {
-        color: '#262626',
-        backgroundColor: '#C9C4C4',
-        fontSize: 14,
-        fontFamily: null,
-        fontWeight: 'normal',
-        textAlign: 'left',
-        padding: {
-          top: 0,
-          bottom: 40,
-          right: 24,
-          left: 24,
-        },
-      },
-      props: {
-        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+        text: 'Hi {{firstName}},\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+        markdown: true
       },
     },
   },
@@ -179,6 +157,7 @@ const BASIC_B2: TEditorConfiguration = {
       },
       props: {
         text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+        markdown: true
       },
     },
   },

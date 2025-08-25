@@ -10,13 +10,9 @@ const PRODUCT_UPDATE: TEditorConfiguration = {
       fontFamily: 'MODERN_SANS',
       childrenIds: [
         'logo-section',
-        'greeting-section',
         'intro-section',
-        'features-section',
-        'get-started-title',
-        'get-started-text',
-        'feedback-section',
-        'signature-text',
+        'features-content',
+        'get-started-section',
         'signature-team',
         'promotional-banner',
         'block-social-media',
@@ -46,28 +42,6 @@ const PRODUCT_UPDATE: TEditorConfiguration = {
       },
     },
   },
-  'greeting-section': {
-    type: 'Text',
-    data: {
-      style: {
-        color: '#333333',
-        backgroundColor: '#FFFFFF',
-        fontSize: 16,
-        fontFamily: null,
-        fontWeight: 'normal',
-        textAlign: 'left',
-        padding: {
-          top: 16,
-          bottom: 16,
-          right: 24,
-          left: 24,
-        },
-      },
-      props: {
-        text: 'Hi [First Name],',
-      },
-    },
-  },
   'intro-section': {
     type: 'Text',
     data: {
@@ -79,145 +53,46 @@ const PRODUCT_UPDATE: TEditorConfiguration = {
         fontWeight: 'normal',
         textAlign: 'left',
         padding: {
-          top: 0,
-          bottom: 20,
+          top: 12,
+          bottom: 12,
           right: 24,
           left: 24,
         },
       },
       props: {
-        text: 'We\'re thrilled to share some exciting updates to [Your Product Name]! Our team has been working hard to bring you new features and improvements designed to make your experience even better.',
+        text: `Hi [First Name],\n
+We\'re thrilled to share some exciting updates to [Your Product Name]! Our team has been working hard to bring you new features and improvements designed to make your experience even better.`,
+        markdown: true
       },
     },
   },
-  'features-section': {
-    type: 'Container',
+  'features-content': {
+    type: 'Text',
     data: {
       style: {
+        color: '#333333',
         backgroundColor: '#FFFFFF',
+        fontSize: 14,
+        fontFamily: null,
+        fontWeight: 'normal',
+        textAlign: 'left',
         padding: {
-          top: 16,
+          top: 12,
           bottom: 24,
           right: 24,
           left: 24,
         },
       },
       props: {
-        childrenIds: ['features-title', 'feature-1', 'feature-2', 'feature-3']
-      }
-    }
-  },
-  'features-title': {
-    type: 'Text',
-    data: {
-      style: {
-        color: '#333333',
-        backgroundColor: '#FFFFFF',
-        fontSize: 16,
-        fontFamily: null,
-        fontWeight: 'bold',
-        textAlign: 'left',
-        padding: {
-          top: 0,
-          bottom: 12,
-          right: 0,
-          left: 0,
-        },
-      },
-      props: {
-        text: 'Here\'s what\'s new:',
+        text: `**Here's what's new:** \n 
+• **[Feature 1]:** Brief description of the new feature and how it benefits the user.  
+• **[Feature 2]:** Short explanation of another improvement or addition.  
+• **[Feature 3]:** Highlight any bug fixes, performance enhancements, or user-requested changes.`,
+        markdown: true,
       },
     },
   },
-  'feature-1': {
-    type: 'Text',
-    data: {
-      style: {
-        color: '#333333',
-        backgroundColor: '#FFFFFF',
-        fontSize: 14,
-        fontFamily: null,
-        fontWeight: 'normal',
-        textAlign: 'left',
-        padding: {
-          top: 8,
-          bottom: 8,
-          right: 0,
-          left: 0,
-        },
-      },
-      props: {
-        text: '• [Feature 1]: Brief description of the new feature and how it benefits the user.',
-      },
-    },
-  },
-  'feature-2': {
-    type: 'Text',
-    data: {
-      style: {
-        color: '#333333',
-        backgroundColor: '#FFFFFF',
-        fontSize: 14,
-        fontFamily: null,
-        fontWeight: 'normal',
-        textAlign: 'left',
-        padding: {
-          top: 8,
-          bottom: 8,
-          right: 0,
-          left: 0,
-        },
-      },
-      props: {
-        text: '• [Feature 2]: Short explanation of another improvement or addition.',
-      },
-    },
-  },
-  'feature-3': {
-    type: 'Text',
-    data: {
-      style: {
-        color: '#333333',
-        backgroundColor: '#FFFFFF',
-        fontSize: 14,
-        fontFamily: null,
-        fontWeight: 'normal',
-        textAlign: 'left',
-        padding: {
-          top: 8,
-          bottom: 8,
-          right: 0,
-          left: 0,
-        },
-      },
-      props: {
-        text: '• [Feature 3]: Highlight any bug fixes, performance enhancements, or user-requested changes.',
-      },
-    },
-  },
-  'get-started-title': {
-    type: 'Text',
-    data: {
-      style: {
-        color: '#333333',
-        backgroundColor: '#FFFFFF',
-        fontSize: 16,
-        fontFamily: null,
-        fontWeight: 'bold',
-        textAlign: 'left',
-        padding: {
-          top: 0,
-          bottom: 16,
-          right: 24,
-          left: 24,
-        },
-      },
-      props: {
-        text: 'How to Get Started:',
-      },
-    },
-  },
-  'get-started-text': {
+  'get-started-section': {
     type: 'Text',
     data: {
       style: {
@@ -235,51 +110,14 @@ const PRODUCT_UPDATE: TEditorConfiguration = {
         },
       },
       props: {
-        text: 'Log in to your account and explore the new features today! For a detailed walkthrough, check out our latest guide at [your website or help center].',
-      },
-    },
-  },
-  'feedback-section': {
-    type: 'Text',
-    data: {
-      style: {
-        color: '#333333',
-        backgroundColor: '#FFFFFF',
-        fontSize: 14,
-        fontFamily: null,
-        fontWeight: 'normal',
-        textAlign: 'left',
-        padding: {
-          top: 0,
-          bottom: 16,
-          right: 24,
-          left: 24,
-        },
-      },
-      props: {
-        text: 'We\'d love to hear your feedback—reply to this email or reach out to our support team anytime.',
-      },
-    },
-  },
-  'signature-text': {
-    type: 'Text',
-    data: {
-      style: {
-        color: '#333333',
-        backgroundColor: '#FFFFFF',
-        fontSize: 14,
-        fontFamily: null,
-        fontWeight: 'normal',
-        textAlign: 'left',
-        padding: {
-          top: 0,
-          bottom: 16,
-          right: 24,
-          left: 24,
-        },
-      },
-      props: {
-        text: 'Thank you for being part of our community!',
+        text: `**How to Get Started:**
+          
+Log in to your account and explore the new features today! For a detailed walkthrough, check out our latest guide at [your website or help center].  
+
+We'd love to hear your feedback—reply to this email or reach out to our support team anytime.  
+
+Thank you for being part of our community!`,
+        markdown: true,
       },
     },
   },

@@ -11,7 +11,6 @@ const BASIC_B1: TEditorConfiguration = {
       childrenIds: [
         'block-header',
         'block-logo',
-        'block-greeting',
         'block-main-content',
         'block-button',
         'block-image-container',
@@ -62,7 +61,7 @@ const BASIC_B1: TEditorConfiguration = {
       },
     },
   },
-  'block-greeting': {
+  'block-main-content': {
     type: 'Text',
     data: {
       style: {
@@ -73,36 +72,15 @@ const BASIC_B1: TEditorConfiguration = {
         fontWeight: 'normal',
         textAlign: 'left',
         padding: {
-          top: 24,
-          bottom: 16,
-          right: 24,
-          left: 24,
-        },
-      },
-      props: {
-        text: 'Hi {{firstName}},',
-      },
-    },
-  },
-  'block-main-content': {
-    type: 'Text',
-    data: {
-      style: {
-        color: '#262626',
-        backgroundColor: '#C9C4C4',
-        fontSize: 14,
-        fontFamily: null,
-        fontWeight: 'normal',
-        textAlign: 'left',
-        padding: {
-          top: 0,
+          top: 32,
           bottom: 80,
           right: 24,
           left: 24,
         },
       },
       props: {
-        text: '[Body of the email - add your message content here.]',
+        text: 'Hi {{firstName}},\n[Body of the email - add your message content here.]',
+        markdown: true
       },
     },
   },

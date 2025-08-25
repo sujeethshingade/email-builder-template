@@ -83,6 +83,7 @@ const BASIC_B4: TEditorConfiguration = {
       },
       props: {
         text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+        markdown: true
       },
     },
   },
@@ -97,14 +98,15 @@ const BASIC_B4: TEditorConfiguration = {
         fontWeight: 'normal',
         textAlign: 'left',
         padding: {
-          top: 0,
-          bottom: 16,
+          top:12,
+          bottom: 24,
           right: 24,
           left: 24,
         },
       },
       props: {
         text: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+        markdown: true
       },
     },
   },
@@ -186,7 +188,7 @@ const BASIC_B4: TEditorConfiguration = {
         fontWeight: 'normal',
         textAlign: 'left',
         padding: {
-          top: 24,
+          top: 12,
           bottom: 24,
           right: 24,
           left: 24,
@@ -194,6 +196,7 @@ const BASIC_B4: TEditorConfiguration = {
       },
       props: {
         text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+        markdown: true
       },
     },
   },

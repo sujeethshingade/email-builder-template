@@ -10,23 +10,20 @@ const DOWNTIME: TEditorConfiguration = {
       fontFamily: 'MODERN_SANS',
       childrenIds: [
         'header-section',
-        'greeting-section',
         'announcement-section',
         'schedule-container',
-        'impact-section',
-        'appreciation-section',
-        'signature-section',
+        'impact-and-appreciation-section',
+        'signature-name',
         'footer-section'
       ],
     },
   },
   'header-section': {
-    type: 'Text',
+    type: 'Heading',
     data: {
       style: {
         color: '#333333',
         backgroundColor: null,
-        fontSize: 20,
         fontFamily: null,
         fontWeight: 'bold',
         textAlign: 'center',
@@ -39,28 +36,7 @@ const DOWNTIME: TEditorConfiguration = {
       },
       props: {
         text: 'We\'re performing scheduled maintenance',
-      },
-    },
-  },
-  'greeting-section': {
-    type: 'Text',
-    data: {
-      style: {
-        color: '#333333',
-        backgroundColor: '#FFFFFF',
-        fontSize: 16,
-        fontFamily: null,
-        fontWeight: 'normal',
-        textAlign: 'left',
-        padding: {
-          top: 24,
-          bottom: 16,
-          right: 24,
-          left: 24,
-        },
-      },
-      props: {
-        text: 'Dear [First Name],',
+        level: 'h2'
       },
     },
   },
@@ -75,35 +51,19 @@ const DOWNTIME: TEditorConfiguration = {
         fontWeight: 'normal',
         textAlign: 'left',
         padding: {
-          top: 0,
-          bottom: 16,
+          top: 12,
+          bottom: 12,
           right: 24,
           left: 24,
         },
       },
       props: {
-        text: 'We\'re committed to providing you with the best possible service. As part of our ongoing improvements, we will be performing scheduled maintenance during the following period:',
+        text: 'Dear [First Name],\n\nWe\'re committed to providing you with the best possible service. As part of our ongoing improvements, we will be performing scheduled maintenance during the following period:',
+        markdown: true
       },
     },
   },
   'schedule-container': {
-    type: 'Container',
-    data: {
-      style: {
-        backgroundColor: '#F8F9FA',
-        padding: {
-          top: 16,
-          bottom: 16,
-          right: 24,
-          left: 24,
-        },
-      },
-      props: {
-        childrenIds: ['schedule-title', 'schedule-date', 'schedule-time']
-      }
-    }
-  },
-  'schedule-title': {
     type: 'Text',
     data: {
       style: {
@@ -111,65 +71,24 @@ const DOWNTIME: TEditorConfiguration = {
         backgroundColor: '#F8F9FA',
         fontSize: 16,
         fontFamily: null,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        padding: {
-          top: 0,
-          bottom: 8,
-          right: 0,
-          left: 0,
-        },
-      },
-      props: {
-        text: 'Downtime Schedule:',
-      },
-    },
-  },
-  'schedule-date': {
-    type: 'Text',
-    data: {
-      style: {
-        color: '#333333',
-        backgroundColor: null,
-        fontSize: 14,
-        fontFamily: null,
         fontWeight: 'normal',
         textAlign: 'center',
         padding: {
-          top: 0,
-          bottom: 4,
-          right: 0,
-          left: 0,
+          top: 16,
+          bottom: 16,
+          right: 24,
+          left: 24,
         },
       },
       props: {
-        text: '🗓️ Date: [MM/DD/YYYY]',
+        text: `**Downtime Schedule:**  
+🗓️ **Date:** [MM/DD/YYYY]  
+⏰ **Time:** [Start Time] - [End Time] [Time Zone]`,
+        markdown: true,
       },
     },
   },
-  'schedule-time': {
-    type: 'Text',
-    data: {
-      style: {
-        color: '#333333',
-        backgroundColor: '#F8F9FA',
-        fontSize: 14,
-        fontFamily: null,
-        fontWeight: 'normal',
-        textAlign: 'center',
-        padding: {
-          top: 0,
-          bottom: 0,
-          right: 0,
-          left: 0,
-        },
-      },
-      props: {
-        text: '⏰ Time: [Start Time] - [End Time] [Time Zone]',
-      },
-    },
-  },
-  'impact-section': {
+  'impact-and-appreciation-section': {
     type: 'Text',
     data: {
       style: {
@@ -187,68 +106,10 @@ const DOWNTIME: TEditorConfiguration = {
         },
       },
       props: {
-        text: 'During this window, [Product/Service Name] will be temporarily unavailable. We recommend saving your work and planning accordingly.',
-      },
-    },
-  },
-  'appreciation-section': {
-    type: 'Text',
-    data: {
-      style: {
-        color: '#333333',
-        backgroundColor: '#FFFFFF',
-        fontSize: 14,
-        fontFamily: null,
-        fontWeight: 'normal',
-        textAlign: 'left',
-        padding: {
-          top: 0,
-          bottom: 16,
-          right: 24,
-          left: 24,
-        },
-      },
-      props: {
-        text: 'We appreciate your patience and understanding as we work to enhance your experience.',
-      },
-    },
-  },
-  'signature-section': {
-    type: 'Container',
-    data: {
-      style: {
-        backgroundColor: '#FFFFFF',
-        padding: {
-          top: 16,
-          bottom: 24,
-          right: 24,
-          left: 24,
-        },
-      },
-      props: {
-        childrenIds: ['signature-thanks', 'signature-name']
-      }
-    }
-  },
-  'signature-thanks': {
-    type: 'Text',
-    data: {
-      style: {
-        color: '#333333',
-        backgroundColor: '#FFFFFF',
-        fontSize: 14,
-        fontFamily: null,
-        fontWeight: 'normal',
-        textAlign: 'left',
-        padding: {
-          top: 0,
-          bottom: 8,
-          right: 0,
-          left: 0,
-        },
-      },
-      props: {
-        text: 'Thank you for choosing [Company Name].',
+        text: `During this window, [Product/Service Name] will be temporarily unavailable. We recommend saving your work and planning accordingly.  
+
+We appreciate your patience and understanding as we work to enhance your experience.`,
+        markdown: true,
       },
     },
   },
@@ -263,10 +124,10 @@ const DOWNTIME: TEditorConfiguration = {
         fontWeight: 'normal',
         textAlign: 'left',
         padding: {
-          top: 0,
-          bottom: 0,
-          right: 0,
-          left: 0,
+          top: 12,
+          bottom: 12,
+          right: 24,
+          left: 24,
         },
       },
       props: {

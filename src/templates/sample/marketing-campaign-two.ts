@@ -689,8 +689,8 @@ const MARKETING_CAMPAIGN_TWO: TEditorConfiguration = {
         fontWeight: 'normal',
         textAlign: 'center',
         padding: {
-          top: 0,
-          bottom: 0,
+          top: 8,
+          bottom: 8,
           right: 0,
           left: 0,
         },
