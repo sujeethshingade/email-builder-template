@@ -49,40 +49,104 @@ function signatureToHtml(block: TEditorBlock): string {
   const color = style.color || '#111827';
   const bg = style.backgroundColor || 'transparent';
   const align = style.textAlign || 'left';
-  const accent = props.accentColor || '#6B21A8';
+  const variant: 'corporate' | 'corporate-avatar' | 'stacked-logo' = ['corporate', 'corporate-avatar', 'stacked-logo'].includes(props.variant)
+    ? props.variant
+    : 'corporate';
 
   const fullName = escapeHtml(props.fullName || 'Your Name');
   const line2 = escapeHtml([props.title, props.department, props.company].filter(Boolean).join(' | ') || 'Title | Company');
-  const line3 = escapeHtml([props.email, props.phone, props.website].filter(Boolean).join('  •  ') || 'email@domain.com  •  000-000-0000');
+  const phone = escapeHtml(props.phone || '000-000-0000');
+  const email = escapeHtml(props.email || 'email@domain.com');
+  const website = escapeHtml(props.website || 'www.example.com');
 
   const avatar = props.avatarUrl
     ? `<img src="${escapeHtml(props.avatarUrl)}" width="56" height="56" style="border-radius:50%;display:block;object-fit:cover" alt="avatar"/>`
     : '';
-  const logo = props.logoUrl ? `<img src="${escapeHtml(props.logoUrl)}" width="120" style="display:block" alt="logo"/>` : '';
+  const logoWidth = variant === 'stacked-logo' ? 140 : 120;
+  const logo = props.logoUrl ? `<img src="${escapeHtml(props.logoUrl)}" width="${logoWidth}" style="display:block" alt="logo"/>` : '';
 
   const socialsHtml = socialToHtml({
     type: 'Social',
     data: { props: { links: props.socialLinks || [] }, style: { textAlign: align, gap: 10, iconSize: 20, padding: { top: 0, right: 0, bottom: 0, left: 0 } } },
   } as any);
 
-  return `
-  <div style="${pad}background:${bg};color:${color};text-align:${align};font-family:Arial,Helvetica,sans-serif;">
-    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+  const nameTitleHtml = `
+    <div style="font-size:16px;font-weight:700">${fullName}</div>
+    <div style="font-size:13px;color:#374151">${line2}</div>
+  `;
+
+  const contactListHtml = `
+    <div style="font-size:13px;color:#374151">
+      <div>${phone}</div>
+      <div>${email}</div>
+      <div>${website}</div>
+    </div>
+  `;
+
+  const dividerCell = `<td style="width:16px"></td><td style="width:1px;background:#e5e7eb"></td><td style="width:16px"></td>`;
+
+  let headerRow = '';
+  let colCount = 0;
+  if (variant === 'corporate') {
+    headerRow = `
       <tr>
-        <td style="width:4px;background:${accent};border-radius:4px"></td>
-        <td style="width:12px"></td>
-        ${avatar ? `<td style="width:56px">${avatar}</td><td style="width:12px"></td>` : ''}
-        <td style="vertical-align:middle">
-          <div style="font-size:16px;font-weight:700">${fullName}</div>
-          <div style="font-size:13px;color:#374151">${line2}</div>
-          <div style="font-size:13px;color:#374151;margin-top:6px">${line3}</div>
-        </td>
-        ${logo ? `<td style="width:12px"></td><td style="vertical-align:middle">${logo}</td>` : ''}
-      </tr>
-    </table>
-    <div style="height:10px"></div>
-    ${socialsHtml}
-  </div>`;
+        <td style="vertical-align:middle">${nameTitleHtml}</td>
+        ${dividerCell}
+        <td style="vertical-align:middle">${contactListHtml}</td>
+      </tr>`;
+    colCount = 5; 
+  } else if (variant === 'corporate-avatar') {
+    headerRow = `
+      <tr>
+        ${avatar ? `<td style="width:56px;vertical-align:middle">${avatar}</td><td style=\"width:8px\"></td>` : ''}
+        <td style="vertical-align:middle">${nameTitleHtml}</td>
+        ${dividerCell}
+        <td style="vertical-align:middle">${contactListHtml}</td>
+      </tr>`;
+    colCount = 5 + (avatar ? 2 : 0); 
+  } else {
+    headerRow = `
+      <tr>
+        <td style="vertical-align:top">${nameTitleHtml}</td>
+      </tr>`;
+    colCount = 1;
+  }
+
+  const bottomCorporate = `
+    <tr><td colspan="${colCount}" style="height:12px"></td></tr>
+    <tr><td colspan="${colCount}" style="height:1px;background:#e5e7eb"></td></tr>
+    <tr><td colspan="${colCount}" style="height:12px"></td></tr>
+    <tr>
+      <td style="vertical-align:middle">${logo || ''}</td>
+      <td colspan="${Math.max(1, colCount - 1)}" style="vertical-align:middle">${socialsHtml}</td>
+    </tr>`;
+
+  const bottomCorporateAvatar = `
+    <tr><td colspan="${colCount}" style="height:12px"></td></tr>
+    <tr><td colspan="${colCount}" style="height:1px;background:#e5e7eb"></td></tr>
+    <tr><td colspan="${colCount}" style="height:12px"></td></tr>
+    <tr>
+      <td colspan="2"></td>
+      <td style="vertical-align:middle">${logo || ''}</td>
+      <td colspan="${Math.max(1, colCount - 3)}" style="vertical-align:middle">${socialsHtml}</td>
+    </tr>`;
+
+  const bottomStacked = `
+    <tr><td style="height:12px"></td></tr>
+    ${logo ? `<tr><td style=\"vertical-align:middle\">${logo}</td></tr>` : ''}
+    ${logo ? `<tr><td style=\"height:8px\"></td></tr>` : ''}
+    <tr><td>${socialsHtml}</td></tr>`;
+
+  const headerTable = `
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+  ${headerRow}
+  ${variant === 'stacked-logo' ? bottomStacked : (variant === 'corporate-avatar' ? bottomCorporateAvatar : bottomCorporate)}
+    </table>`;
+
+  return `
+    <div style="${pad}background:${bg};color:${color};text-align:${align};font-family:Arial,Helvetica,sans-serif;">
+      ${headerTable}
+    </div>`;
 }
 
 export function transformForReader(doc: TEditorConfiguration): TEditorConfiguration {
