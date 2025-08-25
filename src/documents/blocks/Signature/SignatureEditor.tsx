@@ -91,11 +91,11 @@ export default function SignatureEditor({ props, style }: SignatureProps) {
     header = (
       <div style={{ display: 'flex', alignItems: 'center', gap: 16, justifyContent: align === 'right' ? 'flex-end' : align === 'center' ? 'center' : 'flex-start' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          {Avatar}
           <div>
             {Name}
             {TitleLine}
           </div>
+          {Avatar}
         </div>
         <Divider />
         <div>{ContactList}</div>

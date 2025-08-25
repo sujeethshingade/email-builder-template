@@ -199,7 +199,7 @@ export const BUTTONS: TButtonProps[] = [
             { platform: 'Website', url: '' },
           ],
         },
-        style: { padding: { top: 16, bottom: 16, left: 24, right: 24 } },
+        style: { padding: { top: 16, bottom: 16, left: 16, right: 16 } },
       },
     }),
   },

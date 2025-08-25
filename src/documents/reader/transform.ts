@@ -98,8 +98,8 @@ function signatureToHtml(block: TEditorBlock): string {
   } else if (variant === 'corporate-avatar') {
     headerRow = `
       <tr>
-        ${avatar ? `<td style="width:56px;vertical-align:middle">${avatar}</td><td style=\"width:8px\"></td>` : ''}
         <td style="vertical-align:middle">${nameTitleHtml}</td>
+        ${avatar ? `<td style=\"width:8px\"></td><td style="width:56px;vertical-align:middle">${avatar}</td>` : ''}
         ${dividerCell}
         <td style="vertical-align:middle">${contactListHtml}</td>
       </tr>`;
@@ -118,7 +118,8 @@ function signatureToHtml(block: TEditorBlock): string {
     <tr><td colspan="${colCount}" style="height:12px"></td></tr>
     <tr>
       <td style="vertical-align:middle">${logo || ''}</td>
-      <td colspan="${Math.max(1, colCount - 1)}" style="vertical-align:middle">${socialsHtml}</td>
+      <td style="width:12px"></td>
+      <td colspan="${Math.max(1, colCount - 2)}" style="vertical-align:middle">${socialsHtml}</td>
     </tr>`;
 
   const bottomCorporateAvatar = `
@@ -126,9 +127,9 @@ function signatureToHtml(block: TEditorBlock): string {
     <tr><td colspan="${colCount}" style="height:1px;background:#e5e7eb"></td></tr>
     <tr><td colspan="${colCount}" style="height:12px"></td></tr>
     <tr>
-      <td colspan="2"></td>
       <td style="vertical-align:middle">${logo || ''}</td>
-      <td colspan="${Math.max(1, colCount - 3)}" style="vertical-align:middle">${socialsHtml}</td>
+      <td style="width:12px"></td>
+      <td colspan="${Math.max(1, colCount - 2)}" style="vertical-align:middle">${socialsHtml}</td>
     </tr>`;
 
   const bottomStacked = `
