@@ -526,6 +526,14 @@ export default function EditorBlockWrapper({ children }: TEditorBlockWrapperProp
   useEffect(() => {
     if (isEditing && editableRef.current) {
       const editableElement = editableRef.current;
+      try {
+        const b: any = block;
+        const raw = (b?.data?.props?.text ?? '') as string;
+        const currentText = raw.replace(/\u200B/g, '');
+        if (editableElement.innerText !== currentText) {
+          editableElement.innerText = currentText;
+        }
+      } catch {}
       
       editableElement.focus();
       
@@ -575,8 +583,6 @@ export default function EditorBlockWrapper({ children }: TEditorBlockWrapperProp
 
   const renderChildren = () => {
     if (isTextOrHeading && isEditing) {
-      const currentText = block?.data?.props?.text || '';
-      
       return (
         <div
           ref={editableRef}
@@ -621,7 +627,6 @@ export default function EditorBlockWrapper({ children }: TEditorBlockWrapperProp
             whiteSpace: 'pre-wrap',
           }}
         >
-          {currentText}
         </div>
       );
     }
