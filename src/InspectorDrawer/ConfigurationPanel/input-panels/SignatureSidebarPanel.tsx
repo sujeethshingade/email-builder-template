@@ -14,6 +14,7 @@ import { SOCIAL_PLATFORMS } from '../../../documents/blocks/Social/SocialPropsSc
 type Props = { data: SignatureProps; setData: (v: SignatureProps) => void };
 
 export default function SignatureSidebarPanel({ data, setData }: Props) {
+  const iconShape = data.style?.iconShape ?? 'rounded';
   const [, setErrors] = useState<Zod.ZodError | null>(null);
   const updateData = (d: unknown) => {
     const res = SignaturePropsSchema.safeParse(d);
@@ -112,6 +113,15 @@ export default function SignatureSidebarPanel({ data, setData }: Props) {
           />
         ))}
       </Stack>
+
+      <RadioGroupInput
+          label="Icon shape"
+          defaultValue={iconShape}
+          onChange={(v) => updateData({ ...data, style: { ...data.style, iconShape: v as any } })}
+          >
+          <ToggleButton value="rounded">Rounded</ToggleButton>
+          <ToggleButton value="square">Circle</ToggleButton>
+      </RadioGroupInput>
 
       <MultiStylePropertyPanel
         names={["textAlign", "backgroundColor", "color", "padding"]}

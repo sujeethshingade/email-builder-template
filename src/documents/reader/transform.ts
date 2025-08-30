@@ -24,22 +24,26 @@ function socialToHtml(block: TEditorBlock): string {
   const align: 'left' | 'center' | 'right' = style.textAlign === 'right' ? 'right' : style.textAlign === 'left' ? 'left' : 'center';
   const pad = stylePadding(style);
   const iconSize = Math.max(8, Math.min(96, style.iconSize ?? 24));
+  const iconShape: 'rounded' | 'square' = (style.iconShape === 'square' ? 'square' : 'rounded');
+  const baseBottom = typeof style?.padding?.bottom === 'number' ? style.padding.bottom : 0;
 
-  const svg = (platform: string) => platformSvgString(platform, iconSize);
+  const svg = (platform: string) => platformSvgString(platform, iconSize, iconShape);
 
   const items = links
     .map((l) => {
       const href = escapeHtml(l.url || '');
       const icon = svg(l.platform);
+      const common = 'display:inline-flex;line-height:0;color:inherit;';
       if (href) {
-        return `<a href="${href}" target="_blank" rel="noreferrer" style="display:inline-block;text-decoration:none;color:inherit;margin-right:${gap}px">${icon}</a>`;
+        return `<a href="${href}" target="_blank" rel="noreferrer" style="${common}text-decoration:none;">${icon}</a>`;
       }
-      return `<span style="display:inline-block;margin-right:${gap}px;color:inherit;">${icon}</span>`;
+      return `<span style="${common}">${icon}</span>`;
     })
     .join('');
 
   const placeholder = '<span style="color:#6B7280;font-size:12px">Social links</span>';
-  return `<div style="${pad}text-align:${align};">${items || placeholder}</div>`;
+  const justify = align === 'right' ? 'flex-end' : align === 'left' ? 'flex-start' : 'center';
+  return `<div style="${pad}display:flex;flex-wrap:wrap;gap:${gap}px;align-items:center;justify-content:${justify};padding-bottom:${baseBottom + gap}px;">${items || placeholder}</div>`;
 }
 
 function signatureToHtml(block: TEditorBlock): string {
@@ -64,10 +68,21 @@ function signatureToHtml(block: TEditorBlock): string {
     : '';
   const logoWidth = variant === 'stacked-logo' ? 140 : 120;
   const logo = props.logoUrl ? `<img src="${escapeHtml(props.logoUrl)}" width="${logoWidth}" style="display:block" alt="logo"/>` : '';
+  const socialIconSize = typeof style?.socialIconSize === 'number' ? style.socialIconSize : (typeof style?.iconSize === 'number' ? style.iconSize : 20);
+  const socialIconShape: 'rounded' | 'square' = style?.iconShape === 'square' ? 'square' : 'rounded';
 
   const socialsHtml = socialToHtml({
     type: 'Social',
-    data: { props: { links: props.socialLinks || [] }, style: { textAlign: align, gap: 10, iconSize: 20, padding: { top: 0, right: 0, bottom: 0, left: 0 } } },
+    data: {
+      props: { links: props.socialLinks || [] },
+      style: {
+        textAlign: align,
+        gap: 10,
+        iconSize: socialIconSize,
+        iconShape: socialIconShape,
+        padding: { top: 0, right: 0, bottom: 0, left: 0 }
+      }
+    },
   } as any);
 
   const nameTitleHtml = `

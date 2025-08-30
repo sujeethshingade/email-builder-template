@@ -11,6 +11,7 @@ const DEFAULT_LINKS = [
 export default function SocialEditor({ props, style }: SocialProps) {
   const gap = style?.gap ?? 12;
   const iconSize = style?.iconSize ?? 24;
+  const iconShape = style?.iconShape ?? 'rounded';
   const padding = style?.padding
     ? `${style.padding.top}px ${style.padding.right}px ${style.padding.bottom}px ${style.padding.left}px`
     : '16px 24px';
@@ -20,6 +21,7 @@ export default function SocialEditor({ props, style }: SocialProps) {
   }>;
 
   const wrapperStyle: React.CSSProperties = {
+    flexWrap: 'wrap',
     display: 'flex',
     gap,
     alignItems: 'center',
@@ -27,26 +29,23 @@ export default function SocialEditor({ props, style }: SocialProps) {
     padding,
   };
 
-  const renderIcon = (platform: string) => <PlatformIcon platform={platform} size={iconSize} />;
+  const renderIcon = (platform: string) => <PlatformIcon platform={platform} size={iconSize} shape={iconShape as any} />;
 
   return (
     <div style={wrapperStyle}>
-      {links
-        .map((l) => {
-          const i = (
-            <span key={`${l.platform}-${l.url}`} style={{ display: 'inline-flex' }}>
-              {renderIcon(l.platform)}
-            </span>
-          );
-          const url = l.url ?? '';
-          return url ? (
-            <a key={`${l.platform}-${url}`} href={url} target="_blank" rel="noreferrer" style={{ color: 'inherit' }}>
-              {renderIcon(l.platform)}
-            </a>
-          ) : (
-            i
-          );
-        })}
+      {links.map((l) => {
+        const url = l.url ?? '';
+        const content = renderIcon(l.platform);
+        return url ? (
+          <a key={`${l.platform}-${url}`} href={url} target="_blank" rel="noreferrer" style={{ color: 'inherit', display: 'inline-flex' }}>
+            {content}
+          </a>
+        ) : (
+          <span key={`${l.platform}-${l.url}`} style={{ display: 'inline-flex' }}>
+            {content}
+          </span>
+        );
+      })}
     </div>
   );
 }

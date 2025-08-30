@@ -164,10 +164,9 @@ export const BUTTONS: TButtonProps[] = [
       data: {
         props: {
           links: [
+            { platform: 'Instagram', url: '' },
             { platform: 'LinkedIn', url: '' },
             { platform: 'X', url: '' },
-            { platform: 'Instagram', url: '' },
-            { platform: 'Website', url: '' },
           ],
         },
         style: { 
@@ -194,9 +193,9 @@ export const BUTTONS: TButtonProps[] = [
           avatarUrl: 'https://cdn-icons-png.flaticon.com/512/6596/6596121.png',
           logoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCsOoqjwp34ekCW3K0GeuW1SH0v-hjzx-aYQ&s',
           socialLinks: [
+            { platform: 'Instagram', url: '' },
             { platform: 'LinkedIn', url: '' },
             { platform: 'X', url: '' },
-            { platform: 'Website', url: '' },
           ],
         },
         style: { padding: { top: 16, bottom: 16, left: 16, right: 16 } },

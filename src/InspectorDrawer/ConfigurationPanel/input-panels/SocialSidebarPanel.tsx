@@ -1,7 +1,7 @@
 "use client";
 import React, { useMemo, useState } from 'react';
 
-import { Box, Chip, Stack } from '@mui/material';
+import { Box, Chip, Stack, ToggleButton } from '@mui/material';
 import { FormatSizeOutlined, SettingsEthernetOutlined } from '@mui/icons-material';
 
 import SocialPropsSchema, { SOCIAL_PLATFORMS, SocialProps } from '../../../documents/blocks/Social/SocialPropsSchema';
@@ -9,6 +9,7 @@ import BaseSidebarPanel from './helpers/BaseSidebarPanel';
 import TextInput from './helpers/inputs/TextInput';
 import MultiStylePropertyPanel from './helpers/style-inputs/MultiStylePropertyPanel';
 import SliderInput from './helpers/inputs/SliderInput';
+import RadioGroupInput from './helpers/inputs/RadioGroupInput';
 import Zod from 'zod';
 
 
@@ -27,6 +28,7 @@ export default function SocialSidebarPanel({ data, setData }: Props) {
   };
 
   const links = useMemo(() => data.props?.links ?? [], [data.props?.links]);
+  const iconShape = data.style?.iconShape ?? 'rounded';
 
   return (
     <BaseSidebarPanel title="Social block">
@@ -85,6 +87,14 @@ export default function SocialSidebarPanel({ data, setData }: Props) {
           defaultValue={data.style?.gap ?? 12}
           onChange={(v) => updateData({ ...data, style: { ...data.style, gap: v } })}
         />
+        <RadioGroupInput
+          label="Icon shape"
+          defaultValue={iconShape}
+          onChange={(v) => updateData({ ...data, style: { ...data.style, iconShape: v as any } })}
+        >
+          <ToggleButton value="rounded">Rounded</ToggleButton>
+          <ToggleButton value="square">Circle</ToggleButton>
+        </RadioGroupInput>
       </Stack>
 
       <MultiStylePropertyPanel

@@ -70,7 +70,7 @@ export default function SignatureEditor({ props, style }: SignatureProps) {
             { platform: 'Instagram', url: '' },
           ],
         }}
-        style={{ textAlign: align, gap: 10, iconSize: 20 }}
+        style={{ textAlign: align, gap: 10, iconSize: 20, iconShape: style?.iconShape || 'rounded' }}
       />
     </div>
   );

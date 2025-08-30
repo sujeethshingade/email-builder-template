@@ -36,6 +36,7 @@ const SignaturePropsSchema = z.object({
       textAlign: zTextAlign().optional().nullable(),
       backgroundColor: COLOR,
       color: COLOR,
+      iconShape: z.enum(['rounded', 'square']).optional().nullable(),
     })
     .optional()
     .nullable(),
