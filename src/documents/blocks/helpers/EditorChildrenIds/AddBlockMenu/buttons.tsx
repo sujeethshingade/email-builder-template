@@ -172,6 +172,7 @@ export const BUTTONS: TButtonProps[] = [
         style: { 
           padding: { top: 16, bottom: 16, left: 8, right: 8 },
           textAlign: 'center',
+          iconShape: 'square',
          },
       },
     }),

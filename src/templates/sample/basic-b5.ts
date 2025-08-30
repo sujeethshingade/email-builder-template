@@ -362,7 +362,8 @@ const BASIC_B5: TEditorConfiguration = {
         textAlign: 'center',
         gap: 16,
         iconSize: 32,
-        iconShape: 'rounded',
+  iconShape: 'rounded',
+  color: '#262626',
       },
       props: {
         links: [

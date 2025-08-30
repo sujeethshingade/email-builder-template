@@ -74,15 +74,20 @@ function svgForPlatform(platform: PlatformName, size: number, shape: IconShape):
   let glyph = glyphMarkup(platform, shape).trim();
 
   if (/<svg\b/i.test(glyph)) {
-    return glyph
+    const withColor = glyph
       .replace(/<\?xml[^>]*>/g, '')
       .replace(/<!DOCTYPE[^>]*>/g, '')
       .replace(/width="[^"]*"/g, `width="${s}"`)
       .replace(/height="[^"]*"/g, `height="${s}"`)
-      .replace('<svg ', `<svg style="${style}" aria-hidden="true" focusable="false" `);
+  .replace('<svg ', `<svg style="${style}" fill="currentColor" aria-hidden="true" focusable="false" `)
+      .replace(/fill="#000000"/g, 'fill="currentColor"')
+  .replace(/fill="#000"/g, 'fill="currentColor"')
+  .replace(/fill:\s*rgb\(0,\s*0,\s*0\)/g, 'fill:currentColor')
+  .replace(/fill:\s*#000000/g, 'fill:currentColor')
+  .replace(/fill:\s*#000\b/g, 'fill:currentColor');
+    return withColor;
   }
 
-  // For non-SVG glyphs, wrap them over a colored background
   return `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="${style}" aria-hidden="true" focusable="false">
       <rect x="0" y="0" width="24" height="24" rx="${rx}" fill="currentColor"/>

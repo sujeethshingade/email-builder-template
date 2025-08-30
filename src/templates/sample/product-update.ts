@@ -178,7 +178,8 @@ Thank you for being part of our community!`,
         textAlign: 'center',
         gap: 16,
         iconSize: 32,
-        iconShape: 'square',
+    iconShape: 'square',
+    color: '#333333',
       },
       props: {
         links: [

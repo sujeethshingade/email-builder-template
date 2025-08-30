@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { zPadding, zTextAlign } from '../helpers/zod';
+import { zColor, zPadding, zTextAlign } from '../helpers/zod';
 
 export const SOCIAL_PLATFORMS = [
   'Instagram',
@@ -31,6 +31,7 @@ const SocialPropsSchema = z.object({
   iconSize: z.number().optional().nullable(),
       iconShape: z.enum(['rounded', 'square']).optional().nullable(),
       textAlign: zTextAlign().optional().nullable(),
+  color: zColor().optional().nullable(),
       padding: zPadding().optional().nullable(),
     })
     .optional()

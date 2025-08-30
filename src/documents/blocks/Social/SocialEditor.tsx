@@ -11,7 +11,7 @@ const DEFAULT_LINKS = [
 export default function SocialEditor({ props, style }: SocialProps) {
   const gap = style?.gap ?? 12;
   const iconSize = style?.iconSize ?? 24;
-  const iconShape = style?.iconShape ?? 'rounded';
+  const iconShape = style?.iconShape ?? 'square';
   const padding = style?.padding
     ? `${style.padding.top}px ${style.padding.right}px ${style.padding.bottom}px ${style.padding.left}px`
   : '16px 8px';
@@ -27,6 +27,7 @@ export default function SocialEditor({ props, style }: SocialProps) {
     alignItems: 'center',
     justifyContent: style?.textAlign === 'right' ? 'flex-end' : style?.textAlign === 'left' ? 'flex-start' : 'center',
     padding,
+    color: style?.color || undefined,
   };
 
   const renderIcon = (platform: string) => <PlatformIcon platform={platform} size={iconSize} shape={iconShape as any} />;
@@ -41,7 +42,7 @@ export default function SocialEditor({ props, style }: SocialProps) {
             {content}
           </a>
         ) : (
-          <span key={`${l.platform}-${l.url}`} style={{ display: 'inline-flex' }}>
+          <span key={`${l.platform}-${l.url}`} style={{ display: 'inline-flex', color: 'inherit' }}>
             {content}
           </span>
         );
