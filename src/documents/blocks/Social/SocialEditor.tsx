@@ -14,7 +14,7 @@ export default function SocialEditor({ props, style }: SocialProps) {
   const iconShape = style?.iconShape ?? 'rounded';
   const padding = style?.padding
     ? `${style.padding.top}px ${style.padding.right}px ${style.padding.bottom}px ${style.padding.left}px`
-    : '16px 24px';
+  : '16px 8px';
   const links = (props?.links?.length ? props.links : (DEFAULT_LINKS as any)) as Array<{
     platform: string;
     url?: string | null;

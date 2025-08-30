@@ -166,194 +166,28 @@ Thank you for being part of our community!`,
     },
   },
   'block-social-media': {
-    type: 'ColumnsContainer',
+    type: 'Social',
     data: {
       style: {
-        backgroundColor: null,
         padding: {
-          top: 16,
-          bottom: 16,
-          right: 80,
-          left: 80,
-        },
-      },
-      props: {
-        columnsCount: 2,
-        fixedWidths: [30, 20, null],
-        columns: [
-          {
-            childrenIds: ['block-social-media-left'],
-          },
-          {
-            childrenIds: ['block-social-media-right'],
-          },
-          {
-            childrenIds: [],
-          },
-        ]
-      },
-    },
-  },
-  'block-social-media-left': {
-    type: 'ColumnsContainer',
-    data: {
-      style: {
-        backgroundColor: null,
-        padding: {
-          top: 0,
-          bottom: 0,
-          right: 0,
-          left: 0,
-        },
-      },
-      props: {
-        columnsCount: 3,
-        fixedWidths: [null, null, null],
-        columns: [
-          {
-            childrenIds: ['block-social-media-left-left'],
-          },
-          {
-            childrenIds: ['block-social-media-left-center'],
-          },
-          {
-            childrenIds: ['block-social-media-left-right'],
-          },
-        ]
-      },
-    },
-  },
-  'block-social-media-left-left': {
-    type: 'Image',
-    data: {
-      style: {
-        backgroundColor: null,
-        padding: {
-          top: 0,
-          bottom: 0,
-          right: 0,
-          left: 0,
+          top: 12,
+          bottom: 12,
+          right: 8,
+          left: 8,
         },
         textAlign: 'center',
+        gap: 16,
+        iconSize: 32,
+        iconShape: 'square',
       },
       props: {
-        url: 'https://img.freepik.com/premium-vector/facebook-logo-vector-facebook-official-logo-vector-facebook-logo-illustrator_1002350-1803.jpg?semt=ais_hybrid&w=740&q=80',
-        alt: 'Facebook',
-        contentAlignment: 'middle',
-        width: 30
-      },
-    },
-  },
-    'block-social-media-left-center': {
-    type: 'Image',
-    data: {
-      style: {
-        backgroundColor: null,
-        padding: {
-          top: 0,
-          bottom: 0,
-          right: 0,
-          left: 0,
-        },
-        textAlign: 'center',
-      },
-      props: {
-        url: 'https://static.vecteezy.com/system/resources/previews/018/930/415/non_2x/instagram-logo-instagram-icon-transparent-free-png.png',
-        alt: 'Instagram',
-        contentAlignment: 'middle',
-        width: 45
-      },
-    },
-  },
-    'block-social-media-left-right': {
-    type: 'Image',
-    data: {
-      style: {
-        backgroundColor: null,
-        padding: {
-          top: 0,
-          bottom: 0,
-          right: 0,
-          left: 0,
-        },
-        textAlign: 'center',
-      },
-      props: {
-        url: 'https://i.pinimg.com/1200x/dc/14/bf/dc14bf8657854c461a858844f8d04009.jpg',
-        alt: 'X',
-        contentAlignment: 'middle',
-        width: 35
-      },
-    },
-  },
-  'block-social-media-right': {
-    type: 'ColumnsContainer',
-    data: {
-      style: {
-        backgroundColor: null,
-        padding: {
-          top: 0,
-          bottom: 0,
-          right: 0,
-          left: 0,
-        },
-      },
-      props: {
-        columnsCount: 2,
-        fixedWidths: [null, null, null],
-        columns: [
-          {
-            childrenIds: ['block-social-media-right-left'],
-          },
-          {
-            childrenIds: ['block-social-media-right-right'],
-          },
-          {
-            childrenIds: [],
-          },
-        ]
-      },
-    },
-  },
-  'block-social-media-right-left': {
-    type: 'Image',
-    data: {
-      style: {
-        backgroundColor: null,
-        padding: {
-          top: 0,
-          bottom: 0,
-          right: 0,
-          left: 0,
-        },
-        textAlign: 'center',
-      },
-      props: {
-        url: 'https://static.vecteezy.com/system/resources/thumbnails/003/731/316/small_2x/web-icon-line-on-white-background-image-for-web-presentation-logo-icon-symbol-free-vector.jpg',
-        alt: 'Website',
-        contentAlignment: 'middle',
-        width: 40
-      },
-    },
-  },
-  'block-social-media-right-right': {
-    type: 'Image',
-    data: {
-      style: {
-        backgroundColor: null,
-        padding: {
-          top: 0,
-          bottom: 0,
-          right: 0,
-          left: 0,
-        },
-        textAlign: 'center',
-      },
-      props: {
-        url: 'https://static.vecteezy.com/system/resources/previews/023/986/492/non_2x/tiktok-logo-tiktok-logo-transparent-tiktok-icon-transparent-free-free-png.png',
-        alt: 'Image',
-        contentAlignment: 'middle',
-        width: 35
+        links: [
+          { platform: 'Facebook', url: '' },
+          { platform: 'Instagram', url: '' },
+          { platform: 'X', url: '' },
+          { platform: 'TikTok', url: '' },
+          { platform: 'LinkedIn', url: '' },
+        ],
       },
     },
   },
@@ -368,7 +202,7 @@ Thank you for being part of our community!`,
         fontWeight: 'normal',
         textAlign: 'center',
         padding: {
-          top: 8,
+          top: 0,
           bottom: 0,
           right: 24,
           left: 24,
