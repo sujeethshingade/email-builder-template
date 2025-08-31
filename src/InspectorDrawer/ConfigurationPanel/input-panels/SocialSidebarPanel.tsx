@@ -67,7 +67,8 @@ export default function SocialSidebarPanel({ data, setData }: Props) {
       ))}
 
       <MultiStylePropertyPanel
-        names={["color"]}
+  names={["color"]}
+  labels={{ color: "Icon color" }}
         value={data.style}
         onChange={(style) => updateData({ ...data, style })}
       />

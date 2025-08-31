@@ -15,8 +15,9 @@ type StylePropertyPanelProps = {
   name: keyof TStyle;
   value: TStyle;
   onChange: (style: TStyle) => void;
+  labelOverride?: string;
 };
-export default function SingleStylePropertyPanel({ name, value, onChange }: StylePropertyPanelProps) {
+export default function SingleStylePropertyPanel({ name, value, onChange, labelOverride }: StylePropertyPanelProps) {
   const defaultValue = value[name] ?? null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleChange = (v: any) => {
@@ -25,9 +26,9 @@ export default function SingleStylePropertyPanel({ name, value, onChange }: Styl
 
   switch (name) {
     case 'backgroundColor':
-      return <NullableColorInput label="Background color" defaultValue={defaultValue} onChange={handleChange} />;
+      return <NullableColorInput label={labelOverride ?? "Background color"} defaultValue={defaultValue} onChange={handleChange} />;
     case 'borderColor':
-      return <NullableColorInput label="Border color" defaultValue={defaultValue} onChange={handleChange} />;
+      return <NullableColorInput label={labelOverride ?? "Border color"} defaultValue={defaultValue} onChange={handleChange} />;
     case 'borderRadius':
       return (
         <SliderInput
@@ -37,22 +38,22 @@ export default function SingleStylePropertyPanel({ name, value, onChange }: Styl
           marks
           min={0}
           max={48}
-          label="Border radius"
+          label={labelOverride ?? "Border radius"}
           defaultValue={defaultValue}
           onChange={handleChange}
         />
       );
     case 'color':
-      return <NullableColorInput label="Text color" defaultValue={defaultValue} onChange={handleChange} />;
+      return <NullableColorInput label={labelOverride ?? "Text color"} defaultValue={defaultValue} onChange={handleChange} />;
     case 'fontFamily':
-      return <NullableFontFamily label="Font family" defaultValue={defaultValue} onChange={handleChange} />;
+      return <NullableFontFamily label={labelOverride ?? "Font family"} defaultValue={defaultValue} onChange={handleChange} />;
     case 'fontSize':
-      return <FontSizeInput label="Font size" defaultValue={defaultValue} onChange={handleChange} />;
+      return <FontSizeInput label={labelOverride ?? "Font size"} defaultValue={defaultValue} onChange={handleChange} />;
     case 'fontWeight':
-      return <FontWeightInput label="Font weight" defaultValue={defaultValue} onChange={handleChange} />;
+      return <FontWeightInput label={labelOverride ?? "Font weight"} defaultValue={defaultValue} onChange={handleChange} />;
     case 'textAlign':
-      return <TextAlignInput label="Alignment" defaultValue={defaultValue} onChange={handleChange} />;
+      return <TextAlignInput label={labelOverride ?? "Alignment"} defaultValue={defaultValue} onChange={handleChange} />;
     case 'padding':
-      return <PaddingInput label="Padding" defaultValue={defaultValue} onChange={handleChange} />;
+      return <PaddingInput label={labelOverride ?? "Padding"} defaultValue={defaultValue} onChange={handleChange} />;
   }
 }
