@@ -24,20 +24,36 @@ export default function SignatureEditor({ props, style }: SignatureProps) {
   const variant = allowedVariants.has(props?.variant as any) ? ((props?.variant as any) as 'corporate' | 'corporate-avatar' | 'stacked-logo') : 'corporate';
 
   const Name = (
-    <div style={{ fontSize: 16, fontWeight: 700 }}>{props?.fullName ?? 'Your Name'}</div>
+    <div style={{ fontSize: 16, fontWeight: 700, color: 'inherit' }} data-editable="fullName" title="Double-click to edit name">{props?.fullName || ''}</div>
   );
 
   const TitleLine = (
-    <div style={{ fontSize: 13, color: '#374151' }}>
-      {[props?.title, props?.department, props?.company].filter(Boolean).join(' | ') || 'Title | Company'}
+    <div style={{ fontSize: 13, color: 'inherit' }}>
+      <span data-editable="title" title="Double-click to edit title">
+        {props?.title || ''}
+      </span>
+      <span>{' | '}</span>
+      <span data-editable="department" title="Double-click to edit department">
+        {props?.department || ''}
+      </span>
+      <span>{' | '}</span>
+      <span data-editable="company" title="Double-click to edit company">
+        {props?.company || ''}
+      </span>
     </div>
   );
 
   const ContactList = (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 13, color: '#374151' }}>
-      {(props?.phone || '000-000-0000') && <div>{props?.phone || '000-000-0000'}</div>}
-      {(props?.email || 'email@domain.com') && <div>{props?.email || 'email@domain.com'}</div>}
-      {(props?.website || 'www.example.com') && <div>{props?.website || 'www.example.com'}</div>}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 13, color: 'inherit' }}>
+      {props?.phone && (
+        <div data-editable="phone" title="Double-click to edit phone">{props.phone}</div>
+      )}
+      {props?.email && (
+        <div data-editable="email" title="Double-click to edit email">{props.email}</div>
+      )}
+      {props?.website && (
+        <div data-editable="website" title="Double-click to edit website">{props.website}</div>
+      )}
     </div>
   );
 
@@ -56,81 +72,115 @@ export default function SignatureEditor({ props, style }: SignatureProps) {
     />
   ) : null;
 
-  const Divider = () => (
-    <div style={{ width: 1, background: '#e5e7eb', alignSelf: 'stretch' }} />
+  const commonSocial = (
+    <SocialEditor
+      props={{
+        links: props?.socialLinks || [],
+      }}
+      style={{ 
+        textAlign: align, 
+        gap: 10, 
+        iconSize: 20, 
+        iconShape: style?.iconShape || 'rounded',
+        padding: { top: 0, right: 0, bottom: 0, left: 0 }
+      }}
+    />
   );
 
-  const commonSocial = (
-    <div style={{ marginTop: 10 }}>
-      <SocialEditor
-        props={{
-          links: props?.socialLinks || [
-            { platform: 'LinkedIn', url: '' },
-            { platform: 'X', url: '' },
-            { platform: 'Instagram', url: '' },
-          ],
-        }}
-        style={{ textAlign: align, gap: 10, iconSize: 20, iconShape: style?.iconShape || 'rounded' }}
-      />
+  const nameTitleContent = (
+    <div>
+      {Name}
+      {TitleLine}
     </div>
   );
 
-  let header: React.ReactNode = null;
+  const dividerCell = (
+    <>
+      <td style={{ width: 16 }}></td>
+      <td style={{ width: 1, background: '#e5e7eb' }}></td>
+      <td style={{ width: 16 }}></td>
+    </>
+  );
+
+  let headerRow: React.ReactNode = null;
+  let colCount = 0;
+  
   if (variant === 'corporate') {
-    header = (
-      <div style={{ display: 'flex', alignItems: 'center', gap: 16, justifyContent: align === 'right' ? 'flex-end' : align === 'center' ? 'center' : 'flex-start' }}>
-        <div>
-          {Name}
-          {TitleLine}
-        </div>
-        <Divider />
-        <div>{ContactList}</div>
-      </div>
+    headerRow = (
+      <tr>
+        <td style={{ verticalAlign: 'middle' }}>{nameTitleContent}</td>
+        {dividerCell}
+        <td style={{ verticalAlign: 'middle' }}>{ContactList}</td>
+      </tr>
     );
+    colCount = 5;
   } else if (variant === 'corporate-avatar') {
-    header = (
-      <div style={{ display: 'flex', alignItems: 'center', gap: 16, justifyContent: align === 'right' ? 'flex-end' : align === 'center' ? 'center' : 'flex-start' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <div>
-            {Name}
-            {TitleLine}
-          </div>
-          {Avatar}
-        </div>
-        <Divider />
-        <div>{ContactList}</div>
-      </div>
+    headerRow = (
+      <tr>
+        <td style={{ verticalAlign: 'middle' }}>{nameTitleContent}</td>
+        {Avatar && <td style={{ width: 16 }}></td>}
+        {Avatar && <td style={{ width: 56, verticalAlign: 'middle' }}>{Avatar}</td>}
+        {dividerCell}
+        <td style={{ verticalAlign: 'middle' }}>{ContactList}</td>
+      </tr>
     );
+    colCount = 5 + (Avatar ? 2 : 0);
   } else if (variant === 'stacked-logo') {
-    header = (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: align === 'right' ? 'flex-end' : align === 'center' ? 'center' : 'flex-start' }}>
-        {Name}
-        {TitleLine}
-      </div>
+    headerRow = (
+      <tr>
+        <td style={{ verticalAlign: 'top' }}>{nameTitleContent}</td>
+      </tr>
     );
+    colCount = 1;
   }
 
-  const bottomRow = (
-    <div style={{ marginTop: 12 }}>
-      <div style={{ height: 1, background: '#e5e7eb', margin: '12px 0' }} />
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
-        {Logo}
-        <div style={{ flex: 1, minWidth: 160 }}>{commonSocial}</div>
-      </div>
-    </div>
+  const bottomCorporate = (
+    <>
+      <tr><td colSpan={colCount} style={{ height: 12 }}></td></tr>
+      <tr><td colSpan={colCount} style={{ height: 1, background: '#e5e7eb' }}></td></tr>
+      <tr><td colSpan={colCount} style={{ height: 12 }}></td></tr>
+      <tr>
+        <td style={{ verticalAlign: 'middle' }}>{Logo}</td>
+        <td style={{ width: 12 }}></td>
+        <td colSpan={Math.max(1, colCount - 2)} style={{ verticalAlign: 'middle' }}>{commonSocial}</td>
+      </tr>
+    </>
+  );
+
+  const bottomCorporateAvatar = (
+    <>
+      <tr><td colSpan={colCount} style={{ height: 12 }}></td></tr>
+      <tr><td colSpan={colCount} style={{ height: 1, background: '#e5e7eb' }}></td></tr>
+      <tr><td colSpan={colCount} style={{ height: 12 }}></td></tr>
+      <tr>
+        <td style={{ verticalAlign: 'middle' }}>{Logo}</td>
+        <td style={{ width: 32 }}></td>
+        <td colSpan={Math.max(1, colCount - 2)} style={{ verticalAlign: 'middle' }}>{commonSocial}</td>
+      </tr>
+    </>
+  );
+
+  const bottomStacked = (
+    <>
+      <tr><td style={{ height: 12 }}></td></tr>
+      {Logo && <tr><td style={{ verticalAlign: 'middle' }}>{Logo}</td></tr>}
+      {Logo && <tr><td style={{ height: 8 }}></td></tr>}
+      <tr><td>{commonSocial}</td></tr>
+    </>
+  );
+
+  const headerTable = (
+    <table role="presentation" cellPadding="0" cellSpacing="0" style={{ border: 0, width: '100%' }}>
+      <tbody>
+        {headerRow}
+        {variant === 'stacked-logo' ? bottomStacked : (variant === 'corporate-avatar' ? bottomCorporateAvatar : bottomCorporate)}
+      </tbody>
+    </table>
   );
 
   return (
     <div style={container}>
-      {header}
-      {variant === 'stacked-logo' ? (
-        <div style={{ marginTop: 12 }}>
-          {Logo}
-          <div style={{ paddingBottom: 12 }}>{commonSocial}</div>
-        </div>
-      ) : (
-        bottomRow
-      )}
+      {headerTable}
     </div>
   );
 }

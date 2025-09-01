@@ -217,6 +217,7 @@ export default function EditorBlockWrapper({ children }: TEditorBlockWrapperProp
     if (isTextOrHeading && !isEditing) {
       e.preventDefault();
       e.stopPropagation();
+      
       setIsEditing(true);
       isEditingSession.current = true;
       forceInspectTab();
@@ -347,7 +348,7 @@ export default function EditorBlockWrapper({ children }: TEditorBlockWrapperProp
 
   const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
     if (!isEditing || !editableRef.current) return;
-
+    
     if (!isTextBlock) {
       if (isHeadingBlock) {
         e.preventDefault();

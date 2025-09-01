@@ -58,7 +58,10 @@ function signatureToHtml(block: TEditorBlock): string {
     : 'corporate';
 
   const fullName = escapeHtml(props.fullName || 'Your Name');
-  const line2 = escapeHtml([props.title, props.department, props.company].filter(Boolean).join(' | ') || 'Title | Company');
+  const title = escapeHtml(props.title || 'Title');
+  const department = escapeHtml(props.department || 'Department');
+  const company = escapeHtml(props.company || 'Company');
+  const line2 = `${title} | ${department} | ${company}`;
   const phone = escapeHtml(props.phone || '000-000-0000');
   const email = escapeHtml(props.email || 'email@domain.com');
   const website = escapeHtml(props.website || 'www.example.com');
@@ -87,11 +90,11 @@ function signatureToHtml(block: TEditorBlock): string {
 
   const nameTitleHtml = `
     <div style="font-size:16px;font-weight:700">${fullName}</div>
-    <div style="font-size:13px;color:#374151">${line2}</div>
+    <div style="font-size:13px">${line2}</div>
   `;
 
   const contactListHtml = `
-    <div style="font-size:13px;color:#374151">
+    <div style="font-size:13px">
       <div>${phone}</div>
       <div>${email}</div>
       <div>${website}</div>
@@ -114,7 +117,7 @@ function signatureToHtml(block: TEditorBlock): string {
     headerRow = `
       <tr>
         <td style="vertical-align:middle">${nameTitleHtml}</td>
-        ${avatar ? `<td style=\"width:8px\"></td><td style="width:56px;vertical-align:middle">${avatar}</td>` : ''}
+        ${avatar ? `<td style=\"width:16px\"></td><td style="width:56px;vertical-align:middle">${avatar}</td>` : ''}
         ${dividerCell}
         <td style="vertical-align:middle">${contactListHtml}</td>
       </tr>`;
@@ -143,7 +146,7 @@ function signatureToHtml(block: TEditorBlock): string {
     <tr><td colspan="${colCount}" style="height:12px"></td></tr>
     <tr>
       <td style="vertical-align:middle">${logo || ''}</td>
-      <td style="width:12px"></td>
+      <td style="width:32px"></td>
       <td colspan="${Math.max(1, colCount - 2)}" style="vertical-align:middle">${socialsHtml}</td>
     </tr>`;
 

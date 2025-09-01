@@ -120,11 +120,24 @@ export default function SignatureSidebarPanel({ data, setData }: Props) {
           onChange={(v) => updateData({ ...data, style: { ...data.style, iconShape: v as any } })}
           >
           <ToggleButton value="rounded">Rounded</ToggleButton>
-          <ToggleButton value="square">Circle</ToggleButton>
+          <ToggleButton value="square">Square</ToggleButton>
       </RadioGroupInput>
 
+      <div style={{ display: 'flex', gap: '5rem' }}>
+        <MultiStylePropertyPanel
+          names={["color"]}
+          value={data.style}
+          onChange={(style) => updateData({ ...data, style })}
+        />
+        <MultiStylePropertyPanel
+          names={["backgroundColor"]}
+          value={data.style}
+          onChange={(style) => updateData({ ...data, style })}
+        />
+      </div>
+
       <MultiStylePropertyPanel
-        names={["textAlign", "backgroundColor", "color", "padding"]}
+        names={["padding"]}
         value={data.style}
         onChange={(style) => updateData({ ...data, style })}
       />

@@ -5,15 +5,16 @@ import { TStyle } from '../TStyle';
 type TReaderBlockWrapperProps = {
   style: TStyle;
   children: JSX.Element;
+  skipPadding?: boolean;
 };
 
-export default function ReaderBlockWrapper({ style, children }: TReaderBlockWrapperProps) {
+export default function ReaderBlockWrapper({ style, children, skipPadding = false }: TReaderBlockWrapperProps) {
   const { padding, borderColor, ...restStyle } = style;
   const cssStyle: CSSProperties = {
     ...restStyle,
   };
 
-  if (padding) {
+  if (padding && !skipPadding) {
     const { top, bottom, left, right } = padding;
     cssStyle.padding = `${top}px ${right}px ${bottom}px ${left}px`;
   }

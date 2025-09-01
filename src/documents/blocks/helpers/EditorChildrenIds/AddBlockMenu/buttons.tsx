@@ -185,12 +185,13 @@ export const BUTTONS: TButtonProps[] = [
       data: {
         props: {
           variant: 'corporate',
-          fullName: 'Your Name',
+          fullName: 'Full Name',
           title: 'Role',
-          department: '',
+          department: 'Department',
           company: 'Company',
-          email: 'email@company.com',
-          phone: '',
+          email: 'email@formidium.com',
+          phone: '123456789',
+          website: 'www.formidium.com',
           avatarUrl: 'https://cdn-icons-png.flaticon.com/512/6596/6596121.png',
           logoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCsOoqjwp34ekCW3K0GeuW1SH0v-hjzx-aYQ&s',
           socialLinks: [
@@ -199,7 +200,7 @@ export const BUTTONS: TButtonProps[] = [
             { platform: 'X', url: '' },
           ],
         },
-        style: { padding: { top: 16, bottom: 16, left: 16, right: 16 } },
+        style: { padding: { top: 12, bottom: 12, left: 8, right: 8 } },
       },
     }),
   },

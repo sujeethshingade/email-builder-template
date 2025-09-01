@@ -20,7 +20,7 @@ export const READER_DICTIONARY = buildBlockConfigurationDictionary({
   Signature: {
     schema: SignaturePropsSchema,
     Component: (props) => (
-      <ReaderBlockWrapper style={props.style as any}>
+      <ReaderBlockWrapper style={props.style as any} skipPadding={true}>
         <SignatureEditor {...props} />
       </ReaderBlockWrapper>
     ),
