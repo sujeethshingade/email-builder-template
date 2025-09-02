@@ -61,11 +61,11 @@ function signatureToHtml(block: TEditorBlock): string {
   const fullName = escapeHtml(props.fullName || 'Your Name');
   const title = escapeHtml(props.title || 'Title');
   const department = escapeHtml(props.department || 'Department');
-  const company = escapeHtml(props.company || 'Company');
-  const line2 = `${title} | ${department} | ${company}`;
+  const line2 = `${title} | ${department}`;
   const phone = escapeHtml(props.phone || '000-000-0000');
-  const email = escapeHtml(props.email || 'email@domain.com');
-  const website = escapeHtml(props.website || 'www.example.com');
+  const emailRaw = props.email || 'email@domain.com';
+  const email = escapeHtml(emailRaw);
+  const website = escapeHtml(props.website || 'www.formidium.com');
 
   const avatar = props.avatarUrl
     ? `<img src="${escapeHtml(props.avatarUrl)}" width="56" height="56" style="border-radius:50%;display:block;object-fit:cover" alt="avatar"/>`
@@ -97,7 +97,7 @@ function signatureToHtml(block: TEditorBlock): string {
   const contactListHtml = `
     <div style="font-size:13px">
       <div>${phone}</div>
-      <div>${email}</div>
+      <div><a href="mailto:${escapeHtml(emailRaw)}" style="color:inherit;text-decoration:none">${email}</a></div>
       <div>${website}</div>
     </div>
   `;

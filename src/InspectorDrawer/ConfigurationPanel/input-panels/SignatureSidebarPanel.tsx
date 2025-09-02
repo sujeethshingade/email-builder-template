@@ -72,7 +72,6 @@ export default function SignatureSidebarPanel({ data, setData }: Props) {
       <TextInput label="Full name" defaultValue={data.props?.fullName ?? ''} onChange={(fullName) => updateData({ ...data, props: { ...data.props, fullName } })} />
       <TextInput label="Title" defaultValue={data.props?.title ?? ''} onChange={(title) => updateData({ ...data, props: { ...data.props, title } })} />
       <TextInput label="Department" defaultValue={data.props?.department ?? ''} onChange={(department) => updateData({ ...data, props: { ...data.props, department } })} />
-      <TextInput label="Company" defaultValue={data.props?.company ?? ''} onChange={(company) => updateData({ ...data, props: { ...data.props, company } })} />
       <TextInput label="Phone" defaultValue={data.props?.phone ?? ''} onChange={(phone) => updateData({ ...data, props: { ...data.props, phone } })} />
       <TextInput label="Email" defaultValue={data.props?.email ?? ''} onChange={(email) => updateData({ ...data, props: { ...data.props, email } })} />
       <TextInput label="Website" defaultValue={data.props?.website ?? ''} onChange={(website) => updateData({ ...data, props: { ...data.props, website } })} />

@@ -24,21 +24,17 @@ export default function SignatureEditor({ props, style }: SignatureProps) {
   const variant = allowedVariants.has(props?.variant as any) ? ((props?.variant as any) as 'corporate' | 'corporate-avatar' | 'stacked-logo') : 'corporate';
 
   const Name = (
-    <div style={{ fontSize: 16, fontWeight: 700, color: 'inherit' }} data-editable="fullName" title="Double-click to edit name">{props?.fullName || ''}</div>
+    <div style={{ fontSize: 16, fontWeight: 700, color: 'inherit' }} data-editable="fullName" title="name">{props?.fullName || ''}</div>
   );
 
   const TitleLine = (
     <div style={{ fontSize: 13, color: 'inherit' }}>
-      <span data-editable="title" title="Double-click to edit title">
+      <span data-editable="title" title="title">
         {props?.title || ''}
       </span>
       <span>{' | '}</span>
-      <span data-editable="department" title="Double-click to edit department">
+      <span data-editable="department" title="department">
         {props?.department || ''}
-      </span>
-      <span>{' | '}</span>
-      <span data-editable="company" title="Double-click to edit company">
-        {props?.company || ''}
       </span>
     </div>
   );
@@ -46,13 +42,15 @@ export default function SignatureEditor({ props, style }: SignatureProps) {
   const ContactList = (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 13, color: 'inherit' }}>
       {props?.phone && (
-        <div data-editable="phone" title="Double-click to edit phone">{props.phone}</div>
+        <div data-editable="phone" title="phone">{props.phone}</div>
       )}
       {props?.email && (
-        <div data-editable="email" title="Double-click to edit email">{props.email}</div>
+        <div data-editable="email" title="email">
+          <a href={`mailto:${props.email}`} style={{ color: 'inherit', textDecoration: 'none' }}>{props.email}</a>
+        </div>
       )}
       {props?.website && (
-        <div data-editable="website" title="Double-click to edit website">{props.website}</div>
+        <div data-editable="website" title="website">{props.website}</div>
       )}
     </div>
   );

@@ -19,7 +19,6 @@ const SignaturePropsSchema = z.object({
       fullName: z.string().optional().nullable(),
       title: z.string().optional().nullable(),
       department: z.string().optional().nullable(),
-      company: z.string().optional().nullable(),
       phone: z.string().optional().nullable(),
       email: z.string().optional().nullable(),
       website: z.string().optional().nullable(),
