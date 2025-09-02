@@ -50,7 +50,14 @@ export default function SignatureEditor({ props, style }: SignatureProps) {
         </div>
       )}
       {props?.website && (
-        <div data-editable="website" title="website">{props.website}</div>
+        <div data-editable="website" title="website">
+          <a
+            href={/^https?:\/\//i.test(props.website) ? props.website : `https://${props.website}`}
+            style={{ color: 'inherit', textDecoration: 'none' }}
+          >
+            {props.website}
+          </a>
+        </div>
       )}
     </div>
   );

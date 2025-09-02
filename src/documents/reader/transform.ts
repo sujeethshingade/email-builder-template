@@ -65,7 +65,9 @@ function signatureToHtml(block: TEditorBlock): string {
   const phone = escapeHtml(props.phone || '000-000-0000');
   const emailRaw = props.email || 'email@domain.com';
   const email = escapeHtml(emailRaw);
-  const website = escapeHtml(props.website || 'www.formidium.com');
+  const websiteRaw = props.website || 'www.formidium.com';
+  const website = escapeHtml(websiteRaw);
+  const websiteHref = /^https?:\/\//i.test(websiteRaw) ? websiteRaw : `https://${websiteRaw}`;
 
   const avatar = props.avatarUrl
     ? `<img src="${escapeHtml(props.avatarUrl)}" width="56" height="56" style="border-radius:50%;display:block;object-fit:cover" alt="avatar"/>`
@@ -98,7 +100,7 @@ function signatureToHtml(block: TEditorBlock): string {
     <div style="font-size:13px">
       <div>${phone}</div>
       <div><a href="mailto:${escapeHtml(emailRaw)}" style="color:inherit;text-decoration:none">${email}</a></div>
-      <div>${website}</div>
+      <div><a href="${escapeHtml(websiteHref)}" style="color:inherit;text-decoration:none">${website}</a></div>
     </div>
   `;
 

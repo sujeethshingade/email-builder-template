@@ -179,7 +179,6 @@ Thank you for being part of our community!`,
         gap: 16,
         iconSize: 32,
     iconShape: 'square',
-    color: '#333333',
       },
       props: {
         links: [
