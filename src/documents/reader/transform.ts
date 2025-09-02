@@ -1,5 +1,5 @@
 import { TEditorConfiguration, TEditorBlock } from '@/documents/editor/core';
-import { platformSvgString } from '@/documents/blocks/Social/icons';
+import { getSocialIconUrl } from '@/documents/blocks/Social/iconAssets';
 
 function escapeHtml(s: string) {
   return (s || '')
@@ -28,13 +28,18 @@ function socialToHtml(block: TEditorBlock): string {
   const iconShape: 'rounded' | 'square' = (style.iconShape === 'square' ? 'square' : 'rounded');
   const baseBottom = typeof style?.padding?.bottom === 'number' ? style.padding.bottom : 0;
 
-  const svg = (platform: string) => platformSvgString(platform, iconSize, iconShape);
+  const imgTag = (platform: string) => {
+    const cdnShape: 'rounded' | 'circle' = iconShape === 'square' ? 'circle' : 'rounded';
+    const url = getSocialIconUrl(platform, cdnShape);
+    return `<img src="${url}" width="${iconSize}" height="${iconSize}" style="display:block;border:0;" alt="${platform} icon"/>`;
+  };
 
   const items = links
-    .map((l) => {
+    .map((l, index) => {
       const href = escapeHtml(l.url || '');
-      const icon = svg(l.platform);
-      const common = 'display:inline-flex;line-height:0;color:inherit;';
+      const icon = imgTag(l.platform);
+      const marginRight = index < links.length - 1 ? `margin-right:${gap}px;` : '';
+      const common = `display:inline-flex;line-height:0;color:inherit;${marginRight}`;
       if (href) {
         return `<a href="${href}" target="_blank" rel="noreferrer" style="${common}text-decoration:none;">${icon}</a>`;
       }
@@ -43,8 +48,8 @@ function socialToHtml(block: TEditorBlock): string {
     .join('');
 
   const placeholder = '<span style="color:#6B7280;font-size:12px">Social links</span>';
-  const justify = align === 'right' ? 'flex-end' : align === 'left' ? 'flex-start' : 'center';
-  return `<div style="${pad}${bg}display:flex;flex-wrap:wrap;gap:${gap}px;align-items:center;justify-content:${justify};padding-bottom:${baseBottom + gap}px;">${items || placeholder}</div>`;
+  const textAlign = align === 'right' ? 'right' : align === 'left' ? 'left' : 'center';
+  return `<div style="${pad}${bg}text-align:${textAlign};padding-bottom:${baseBottom}px;">${items || placeholder}</div>`;
 }
 
 function signatureToHtml(block: TEditorBlock): string {
