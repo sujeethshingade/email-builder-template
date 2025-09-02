@@ -23,6 +23,7 @@ function socialToHtml(block: TEditorBlock): string {
   const gap = style.gap ?? 12;
   const align: 'left' | 'center' | 'right' = style.textAlign === 'right' ? 'right' : style.textAlign === 'left' ? 'left' : 'center';
   const pad = stylePadding(style);
+  const bg = style.backgroundColor ? `background:${style.backgroundColor};` : '';
   const iconSize = Math.max(8, Math.min(96, style.iconSize ?? 24));
   const iconShape: 'rounded' | 'square' = (style.iconShape === 'square' ? 'square' : 'rounded');
   const baseBottom = typeof style?.padding?.bottom === 'number' ? style.padding.bottom : 0;
@@ -43,7 +44,7 @@ function socialToHtml(block: TEditorBlock): string {
 
   const placeholder = '<span style="color:#6B7280;font-size:12px">Social links</span>';
   const justify = align === 'right' ? 'flex-end' : align === 'left' ? 'flex-start' : 'center';
-  return `<div style="${pad}display:flex;flex-wrap:wrap;gap:${gap}px;align-items:center;justify-content:${justify};padding-bottom:${baseBottom + gap}px;">${items || placeholder}</div>`;
+  return `<div style="${pad}${bg}display:flex;flex-wrap:wrap;gap:${gap}px;align-items:center;justify-content:${justify};padding-bottom:${baseBottom + gap}px;">${items || placeholder}</div>`;
 }
 
 function signatureToHtml(block: TEditorBlock): string {

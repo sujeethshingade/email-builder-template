@@ -31,7 +31,7 @@ const SocialPropsSchema = z.object({
   iconSize: z.number().optional().nullable(),
       iconShape: z.enum(['rounded', 'square']).optional().nullable(),
       textAlign: zTextAlign().optional().nullable(),
-  color: zColor().optional().nullable(),
+  backgroundColor: zColor().optional().nullable(),
       padding: zPadding().optional().nullable(),
     })
     .optional()

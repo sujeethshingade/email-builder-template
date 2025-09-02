@@ -27,7 +27,7 @@ export default function SocialEditor({ props, style }: SocialProps) {
     alignItems: 'center',
     justifyContent: style?.textAlign === 'right' ? 'flex-end' : style?.textAlign === 'left' ? 'flex-start' : 'center',
     padding,
-    color: style?.color || undefined,
+  background: style?.backgroundColor || undefined,
   };
 
   const renderIcon = (platform: string) => <PlatformIcon platform={platform} size={iconSize} shape={iconShape as any} />;

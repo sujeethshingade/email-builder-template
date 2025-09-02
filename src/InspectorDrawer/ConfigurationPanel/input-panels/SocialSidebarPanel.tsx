@@ -66,13 +66,6 @@ export default function SocialSidebarPanel({ data, setData }: Props) {
         />
       ))}
 
-      <MultiStylePropertyPanel
-  names={["color"]}
-  labels={{ color: "Icon color" }}
-        value={data.style}
-        onChange={(style) => updateData({ ...data, style })}
-      />
-
       <Stack direction="column" spacing={2}>
         <SliderInput
           label="Icon Size"
@@ -105,7 +98,7 @@ export default function SocialSidebarPanel({ data, setData }: Props) {
       </Stack>
 
       <MultiStylePropertyPanel
-        names={["textAlign", "padding"]}
+        names={["textAlign", "backgroundColor", "padding"]}
         value={data.style}
         onChange={(style) => updateData({ ...data, style })}
       />
